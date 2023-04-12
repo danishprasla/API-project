@@ -7,6 +7,7 @@ const router = express.Router();
 //   res.cookie('XSRF-TOKEN', req.csrfToken());
 //   res.send('Hello World!');
 // });
+//test router
 
 router.get("/api/csrf/restore", (req, res) => {
   const csrfToken = req.csrfToken();
