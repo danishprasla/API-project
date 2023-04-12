@@ -15,6 +15,8 @@ app.use(morgan('dev')); //middlewares
 app.use(cookieParser());
 app.use(express.json());
 
+const {ValidationError} = require('sequelize')
+
 if(!isProduction) {
     app.use(cors());
     //cors will only be used when in development
@@ -42,6 +44,45 @@ app.use(
 const routes = require('./routes');
 
 app.use(routes);
+
+//below is if we dont match any routes, we will hit this middleware
+app.use((_req, _res, next) => {
+    const err = new Error("The requested resource couldn't be found.")
+    err.title = "Resource Not Found";
+    err.errors = {message: "The requested resource couldn't be found."}
+    err.status = 404;
+    next(err)
+})
+
+//this is to catch sequelize errors
+//sequelize errors will become an instance of the ValidationError from the sequelize package
+app.use((err, _req, _res, next) => {
+    if(err instanceof ValidationError) {
+        let errors = {};
+        for (let error of err.errors) {
+            errors[error.path] = error.message;
+        }
+        err.title = 'Validation error';
+        err.errors = errors;
+    }
+    next(err);
+})
+
+//this is to format all the errors and should be the very last middleware
+
+//adding underscore to the paramaters to signify that those params are not being used but are required. 
+
+app.use((err, _req, res, _next) => {
+    res.status(err.status || 500); //set the status code to whatever the status code is on the err obj OR to 500 if it is not available
+    console.log(err);
+    res.json({
+        title: err.title || 'Server Error',
+        message: err.message,
+        errors: err.errors,
+        stack: isProduction ? null : err.stack
+    })
+
+})
 
 module.exports = app;
 
