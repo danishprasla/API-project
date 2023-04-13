@@ -1,49 +1,19 @@
 const router = require('express').Router();
-const { setTokenCookie } = require('../../utils/auth.js');
-const { User } = require('../../db/models');
-const {restoreUser} = require('../../utils/auth.js')
+const sessionRouter = require('./session.js');
+const usersRouter = require('./users.js');
+const { restoreUser } = require("../../utils/auth.js");
 
-router.use(restoreUser)
+// Connect restoreUser middleware to the API router
+  // If current user session is valid, set req.user to the user in the database
+  // If current user session is not valid, set req.user to null
+router.use(restoreUser);
 
-//simple test route
-// router.post('/test', function(req, res) {
-//   res.json({requestBody: req.body});
-// })
+router.use('/session', sessionRouter);
 
-//TEST ROUTES FOR AUTHENTICATION (line 13-37) 
-// router.get('/set-token-cookie', async (_req, res) => {
-//   const user = await User.findOne({
-//     where: {
-//       username: 'Demo-lition'
-//     }
-//   });
-//   setTokenCookie(res, user);
-//   return res.json({ user: user });
-// });
+router.use('/users', usersRouter);
 
-// router.get(
-//   '/restore-user',
-//   (req, res) => {
-//     return res.json(req.user);
-//   }
-// );
-
-// const { requireAuth } = require('../../utils/auth.js');
-// router.get(
-//   '/require-auth',
-//   requireAuth,
-//   (req, res) => {
-//     return res.json(req.user);
-//   }
-// );
+router.post('/test', (req, res) => {
+  res.json({ requestBody: req.body });
+});
 
 module.exports = router;
-
-// fetch('/api/test', {
-//   method: "POST",
-//   headers: {
-//     "Content-Type": "application/json",
-//     "XSRF-TOKEN": "En2RUxFv-It_FzSHNYha94RUm0NoUmmU74Ao"
-//   },
-//   body: JSON.stringify({ hello: 'world' })
-// }).then(res => res.json()).then(data => console.log(data));
