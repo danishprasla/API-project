@@ -4,15 +4,29 @@ const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth'); //importing authorization fx
 const { User } = require('../../db/models');
+const { check } = require('express-validator')
+const { handleValidationErrors } = require('../../utils/validation')
 
 const router = express.Router();
 
+//this middleware is composed of the check and handleValidationErrors middleware and checks whether or not req.body.credential and req.body.password are empty -- if empty, error returned as response
+const validateLogin = [
+  check('credential')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage('Please provide a valid email or username.'),
+  check('password')
+    .exists({ checkFalsy: true })
+    .withMessage('Please provide a password.'),
+  handleValidationErrors
+];
+
 //log-in route
-router.post('/', async (req, res, next) => {
+router.post('/', validateLogin, async (req, res, next) => {
   const { credential, password } = req.body
   const user = await User.unscoped().findOne({ //removing the default scope
     where: {
-      [Op.or]: { //returning one if the username OR the email matches the credential
+      [Op.or]: { //returning res if the username OR the email matches the credential
         username: credential,
         email: credential
       }
@@ -28,7 +42,6 @@ router.post('/', async (req, res, next) => {
     err.errors = {
       credential: 'The provided credentials were invalid.'
     }
-   
     return next(err)
   }
   const safeUser = {
@@ -58,14 +71,14 @@ router.post('/', async (req, res, next) => {
 //lougout route
 router.delete('/', (_req, res) => {
   res.clearCookie('token');
-  return res.json({message: 'success'})
+  return res.json({ message: 'success' })
 })
 
 
 //restore session user
 router.get('/', async (req, res) => {
-  const {user} = req;
-  if(user) {
+  const { user } = req;
+  if (user) {
     const safeUser = {
       id: user.id,
       email: user.email,
@@ -74,7 +87,7 @@ router.get('/', async (req, res) => {
     return res.json({
       user: safeUser
     });
-  } else return res.json({user: null})
+  } else return res.json({ user: null })
 })
 
 
