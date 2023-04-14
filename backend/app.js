@@ -74,7 +74,9 @@ app.use((err, _req, _res, next) => {
 
 app.use((err, _req, res, _next) => {
     res.status(err.status || 500); //set the status code to whatever the status code is on the err obj OR to 500 if it is not available
+
     console.log(err);
+
     res.json({
         title: err.title || 'Server Error',
         message: err.message,
