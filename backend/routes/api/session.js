@@ -7,6 +7,7 @@ const { User } = require('../../db/models');
 
 const router = express.Router();
 
+//log-in route
 router.post('/', async (req, res, next) => {
   const { credential, password } = req.body
   const user = await User.unscoped().findOne({ //removing the default scope
@@ -54,6 +55,7 @@ router.post('/', async (req, res, next) => {
 //   body: JSON.stringify({ credential: 'demo@user.io', password: 'Hello World!' })
 // }).then(res => res.json()).then(data => console.log(data));
 
+//lougout route
 router.delete('/', (_req, res) => {
   res.clearCookie('token');
   return res.json({message: 'success'})

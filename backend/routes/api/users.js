@@ -6,6 +6,8 @@ const { User } = require('../../db/models');
 
 const router = express.Router();
 
+
+//create a user route
 router.post('/', async (req, res) => {
   const { email, password, username } = req.body
 
