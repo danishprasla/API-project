@@ -36,7 +36,7 @@ router.post('/', async (req, res, next) => {
     username: user.username
   }
 
-  await setTokenCookie(res, safeUser) //setting the token when user logs in
+  await setTokenCookie(res, safeUser) //setting the token when user logs in named 'token'
 
   return res.json({
     user: safeUser
@@ -53,6 +53,11 @@ router.post('/', async (req, res, next) => {
 //   },
 //   body: JSON.stringify({ credential: 'demo@user.io', password: 'Hello World!' })
 // }).then(res => res.json()).then(data => console.log(data));
+
+router.delete('/', (_req, res) => {
+  res.clearCookie('token');
+  return res.json({message: 'success'})
+})
 
 
 
