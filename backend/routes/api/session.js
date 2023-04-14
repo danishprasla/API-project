@@ -46,6 +46,8 @@ router.post('/', validateLogin, async (req, res, next) => {
   }
   const safeUser = {
     id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
     email: user.email,
     username: user.username
   }
@@ -74,6 +76,15 @@ router.delete('/', (_req, res) => {
   return res.json({ message: 'success' })
 })
 
+//code to test logout fx
+// fetch('/api/session', {
+//   method: 'DELETE',
+//   headers: {
+//     "Content-Type": "application/json",
+//     "XSRF-TOKEN": `<value of XSRF-TOKEN cookie>`
+//   }
+// }).then(res => res.json()).then(data => console.log(data));
+
 
 //restore session user
 router.get('/', async (req, res) => {
@@ -81,6 +92,8 @@ router.get('/', async (req, res) => {
   if (user) {
     const safeUser = {
       id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       username: user.username,
     };
