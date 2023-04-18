@@ -157,12 +157,6 @@ router.get('/:id', async (req, res, next) => {
     {
       attributes: ['id', 'firstName', 'lastName']
     })
-  // let ownerObj = {
-  //   id: ownerId,
-  //   firstName: owner.firstName,
-  //   lastName: owner.lastName
-  // }
-  // console.log(ownerObj)
   spot.dataValues.Owner = owner
 
   res.status(200).json(spot)
