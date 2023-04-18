@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, SpotImage, Review } = require('../../db/models');
+const { Spot, SpotImage, Review, User } = require('../../db/models');
 const { check } = require('express-validator')
 const { handleValidationErrors } = require('../../utils/validation');
 const spot = require('../../db/models/spot');
@@ -107,6 +107,64 @@ router.get('/current', requireAuth, async (req, res, next) => {
   res.status(200).json({ Spots: spots })
 })
 
+router.get('/:id', async (req, res, next) => {
+  const id = req.params.id
+
+  const spot = await Spot.findByPk(id)
+
+  if (!spot) {
+    // let err = new Error('Spot does not exist')
+    // err.status = 404
+    // err.title = 'Spot not found'
+    // err.message = "Spot couldn't be found"
+    // next(err)
+    return res.status(404).json({ message: "Spot couldn't be found" })
+  }
+  const starSum = await Review.sum('stars', {
+    where: {
+      spotId: id
+    }
+  })
+  const reviewCount = await Review.count({
+    where: {
+      spotId: id
+    }
+  })
+
+  if (starSum === null) {
+    spot.dataValues.avgRating = 'This location does not have any reviews'
+  } else {
+    //set avg rating to the spot obj
+    avgRating = parseFloat((starSum / reviewCount).toFixed(1))
+    spot.dataValues.numReviews = reviewCount
+    spot.dataValues.avgStarRating = avgRating
+  }
+
+  const spotImages = await SpotImage.findAll({
+    where: {
+      spotId: id
+    },
+    attributes: ['id', 'url', 'preview']
+  })
+  // console.log(spotImages)
+  spot.dataValues.SpotImages = spotImages
+
+
+  //add owner info below
+  const ownerId = spot.ownerId
+  // console.log(ownerId)
+  const owner = await User.findByPk(ownerId)
+  let ownerObj = {
+    id: ownerId,
+    firstName: owner.firstName,
+    lastName: owner.lastName
+  }
+  // console.log(ownerObj)
+  spot.dataValues.Owner = ownerObj
+
+  res.json(spot)
+
+})
 
 
 module.exports = router;
