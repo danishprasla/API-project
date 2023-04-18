@@ -164,4 +164,66 @@ router.get('/:id', async (req, res, next) => {
 })
 
 
+const validateSpotPost = [
+  check('address')
+    .exists({ checkFalsy: true })
+    .withMessage('Street address is required'),
+  check('city')
+    .exists({ checkFalsy: true })
+    .isLength({ min: 3 })
+    .withMessage('City is required'),
+  check('state')
+    .exists({ checkFalsy: true })
+    .isLength({ min: 3 })
+    .withMessage('State is required'),
+  check('country')
+    .exists({ checkFalsy: true })
+    .isLength({ min: 6 })
+    .withMessage('Country is required'),
+  check('lat')
+    .exists({ checkFalsy: true })
+    .isFloat({checkFalsy: true, max: 90, min: -90})  
+    .withMessage('Latitude is not valid'),
+  check('lng')
+    .exists({ checkFalsy: true })
+    .isFloat({checkFalsy: true, max: 180, min: -180})
+    .withMessage('Longitude is not valid'),
+  check('name')
+    .exists({ checkFalsy: true })
+    .isLength({ max: 50 })
+    .withMessage('Name must be less than 50 characters'),
+  check('description')
+    .exists({ checkFalsy: true })
+    .withMessage('Description is required'),
+  check('price')
+    .exists({ checkFalsy: true })
+    .isNumeric({checkFalsy: true})
+    .withMessage('Price per day is required'),
+  handleValidationErrors
+];
+
+
+router.post('/', [requireAuth, validateSpotPost], async (req, res, next) => {
+  const { ownerId, address, city, state, country, lat, lng, name, description, price } = req.body
+  let id = req.user.id
+  const spot = await Spot.create(
+    {
+      ownerId: id,
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price
+    }
+  )
+
+  res.status(201).json(spot)
+
+})
+
+
 module.exports = router;
