@@ -52,7 +52,7 @@ router.post('/', validateLogin, async (req, res, next) => {
     username: user.username
   }
 
-  await setTokenCookie(res, safeUser) //setting the token when user logs in named 'token'
+  await setTokenCookie(res, safeUser) //setting the token when user logs in named 'token' req.user populated
 
   return res.json({
     user: safeUser
@@ -107,3 +107,13 @@ router.get('/', async (req, res) => {
 
 
 module.exports = router; 
+
+
+// fetch('/api/session', {
+//   method: 'POST',
+//   headers: {
+//     "Content-Type": "application/json",
+//     "XSRF-TOKEN": `C71eIWOtjOt3K6C9bk6cFj8A`
+//   },
+//   body: JSON.stringify({ credential: 'Demo-lition', password: 'password' })
+// }).then(res => res.json()).then(data => console.log(data));

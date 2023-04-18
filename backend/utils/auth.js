@@ -7,6 +7,7 @@ const { secret, expiresIn } = jwtConfig;
 //This first function is setting the JWT cookie after a user is logged in or signed up. 
 
 const setTokenCookie = (res, user) => { //setting the HWT cookie after a user has logged in or signed up.
+  //adds it to req body as req.user
   // Create the token.
   const safeUser = {
     id: user.id,
