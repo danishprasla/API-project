@@ -153,16 +153,13 @@ router.get('/:id', async (req, res, next) => {
   //add owner info below
   const ownerId = spot.ownerId
   // console.log(ownerId)
-  const owner = await User.findByPk(ownerId)
-  let ownerObj = {
-    id: ownerId,
-    firstName: owner.firstName,
-    lastName: owner.lastName
-  }
-  // console.log(ownerObj)
-  spot.dataValues.Owner = ownerObj
+  const owner = await User.findByPk(ownerId,
+    {
+      attributes: ['id', 'firstName', 'lastName']
+    })
+  spot.dataValues.Owner = owner
 
-  res.json(spot)
+  res.status(200).json(spot)
 
 })
 
