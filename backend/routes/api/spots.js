@@ -45,10 +45,11 @@ router.get('/', async (req, res, next) => {
       avgRating = parseFloat((starSum / reviewCount).toFixed(1))
       // console.log('avg', avgRating)
       spot.dataValues.avgRating = avgRating
-      // console.log(spot)
+      // console.log('spot id ----->', spot.id)
     }
 
-    //** GET PREVIEW IMAGE BELOW **/
+    //** GET PREVIEW IMAGE BELOW **
+    console.log(spot.id)
 
     let previewImage = await SpotImage.findOne({
       where: {
@@ -56,8 +57,14 @@ router.get('/', async (req, res, next) => {
         preview: true
       }
     })
+    // console.log('preview image', previewImage)
+
     // console.log(previewImage.url)
-    spot.dataValues.previewImage = previewImage.url
+    if(!previewImage){
+      spot.dataValues.previewImage = 'This spot does not have a preview image yet'
+    } else {
+      spot.dataValues.previewImage = previewImage.url
+    }
     // console.log(spot)
   }
   res.status(200).json({ Spots: spots })
@@ -101,7 +108,12 @@ router.get('/current', requireAuth, async (req, res, next) => {
         preview: true
       }
     })
-    spot.dataValues.previewImage = previewImage.url
+    
+    if(!previewImage){
+      spot.dataValues.previewImage = 'This spot does not have a preview image yet'
+    } else {
+      spot.dataValues.previewImage = previewImage.url
+    }
 
   }
   res.status(200).json({ Spots: spots })
@@ -163,7 +175,7 @@ router.get('/:id', async (req, res, next) => {
 
 })
 
-
+//validator for creating a post
 const validateSpotPost = [
   check('address')
     .exists({ checkFalsy: true })
@@ -202,7 +214,7 @@ const validateSpotPost = [
   handleValidationErrors
 ];
 
-
+//creating a post - require auth, post created for whoever is logged in
 router.post('/', [requireAuth, validateSpotPost], async (req, res, next) => {
   const { ownerId, address, city, state, country, lat, lng, name, description, price } = req.body
   let id = req.user.id
@@ -220,10 +232,13 @@ router.post('/', [requireAuth, validateSpotPost], async (req, res, next) => {
       price
     }
   )
-
   res.status(201).json(spot)
-
 })
 
+
+// router.post('/:spotId/images', requireAuth, async (req, res, next) => {
+//   let userId = req.user.id
+  
+// })
 
 module.exports = router;
