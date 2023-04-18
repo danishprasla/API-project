@@ -52,7 +52,7 @@ router.post('/', validateLogin, async (req, res, next) => {
     username: user.username
   }
 
-  await setTokenCookie(res, safeUser) //setting the token when user logs in named 'token'
+  await setTokenCookie(res, safeUser) //setting the token when user logs in named 'token' req.user populated
 
   return res.json({
     user: safeUser
