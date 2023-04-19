@@ -262,6 +262,7 @@ const validateSpotImagePost = [
   handleValidationErrors
 ];
 
+//post a spot image
 router.post('/:spotId/images', [requireAuth, validateSpotImagePost], async (req, res, next) => {
 
   const { url, preview } = req.body
@@ -332,6 +333,7 @@ router.put('/:spotId', [requireAuth, validateSpotPost], async (req, res, next) =
   res.status(200).json(spot)
 })
 
+//delete a spot
 router.delete('/:spotId', requireAuth, async (req, res, next) => {
 
   let userId = req.user.id
@@ -357,6 +359,7 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
   }
 })
 
+//get reviews based on spotId
 router.get('/:spotId/reviews', requireAuth, async (req, res, next) => {
   const spotId = req.params.spotId
   const spot = await Spot.findByPk(spotId)
@@ -388,6 +391,7 @@ router.get('/:spotId/reviews', requireAuth, async (req, res, next) => {
   res.status(200).json(reviews)
 })
 
+//validate review 
 const validateComment = [
   check('review')
     .exists({ checkFalsy: true })
@@ -400,6 +404,7 @@ const validateComment = [
   handleValidationErrors
 ];
 
+//make a review post
 router.post('/:spotId/reviews', [requireAuth, validateComment], async (req, res, next) => {
   let userId = req.user.id
   let spotId = req.params.spotId
@@ -451,5 +456,6 @@ router.post('/:spotId/reviews', [requireAuth, validateComment], async (req, res,
     res.status(201).json(reviewPost)
   }
 })
+
 
 module.exports = router;
