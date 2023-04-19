@@ -119,8 +119,8 @@ router.get('/current', requireAuth, async (req, res, next) => {
   res.status(200).json({ Spots: spots })
 })
 
-router.get('/:id', async (req, res, next) => {
-  const id = req.params.id
+router.get('/:spotId', async (req, res, next) => {
+  const id = req.params.spotId
 
   const spot = await Spot.findByPk(id)
 
@@ -243,7 +243,7 @@ const validateSpotImagePost = [
     .withMessage('Invalid URL'),
   check('preview')
     .exists({ checkFalsy: true })
-    .isBoolean({checkFalsy: true})
+    .isBoolean({ checkFalsy: true })
     .withMessage('Please enter true or false'),
   handleValidationErrors
 ];
@@ -278,6 +278,41 @@ router.post('/:spotId/images', [requireAuth, validateSpotImagePost], async (req,
       preview: spotImage.preview
     })
   }
+})
+
+//edit a spot id
+router.put(':spotId', [requireAuth, validateSpotPost], async (req, res, next) => {
+
+  const { address, city, state, country, lat, lng, name, description, price } = req.body
+
+  let userId = req.user.id
+  let spotId = req.params.spotId
+  let spot = await Spot.findByPk(spotId)
+
+  //check if spot exists based off id
+  if (!spot) {
+    let err = new Error('Spot does not exist')
+    err.status = 404
+    err.title = 'Spot not found'
+    err.message = "Spot couldn't be found"
+    next(err)
+  } else if (spot.ownerId !== userId) { //check if spot belongs to logged in user
+    let err = new Error('Spot does not belong to you')
+    err.status = 403
+    err.title = 'Forbidden'
+    err.message = "The spot does not belong to you"
+    next(err)
+  }
+
+  if (address) spot.address = address
+  if (city) spot.city = city
+  if (state) spot.state = state
+  if (country) spot.country = country
+  if (lat) spot.lat = lat
+  if (lng) spot.lng = lng
+  if (name) spot.name = name
+  if (description) spot.description = description
+  if (price) spot.price = price
 })
 
 module.exports = router;
