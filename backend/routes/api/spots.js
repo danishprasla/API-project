@@ -152,6 +152,7 @@ router.get('/:spotId', async (req, res, next) => {
     spot.dataValues.avgStarRating = avgRating
   }
 
+  //refactoring below with include statements
   const spotImages = await SpotImage.findAll({
     where: {
       spotId: id
