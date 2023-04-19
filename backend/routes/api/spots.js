@@ -388,4 +388,68 @@ router.get('/:spotId/reviews', requireAuth, async (req, res, next) => {
   res.status(200).json(reviews)
 })
 
+const validateComment = [
+  check('review')
+    .exists({ checkFalsy: true })
+    .isLength({ min: 4 })
+    .withMessage('Review text is required'),
+  check('stars')
+    .exists({ checkFalsy: true })
+    .isInt({ checkFalsy: true, max: 5, min: 1 })
+    .withMessage('Stars must be an integer from 1 to 5'),
+  handleValidationErrors
+];
+
+router.post('/:spotId/reviews', [requireAuth, validateComment], async (req, res, next) => {
+  let userId = req.user.id
+  let spotId = req.params.spotId
+  let spot = await Spot.findByPk(spotId)
+  const { review, stars } = req.body
+
+  //check to see if a review exists already for the spot made by the user
+  //null if it doesnt exist
+  const reviewCheck = await Review.findAll({
+    where: {
+      userId: userId,
+      spotId: spotId
+    }
+  })
+  console.log(reviewCheck)
+
+  //check if spot exists based off id
+  if (!spot) {
+    let err = new Error('Spot does not exist')
+    err.status = 404
+    err.title = 'Spot not found'
+    err.message = "Spot couldn't be found"
+    return next(err)
+  }
+  //check if variable is true
+  else if (reviewCheck.length >= 1) {
+    let err = new Error('Review for this spot already exists')
+    err.title = 'User already has a review for this spot'
+    err.message = 'User already has a review for this spot'
+    return next(err)
+  }
+  //check if the user is trying to make a review for a spot they own
+  //err if true
+  else if (spot.ownerId == userId) {
+    let err = new Error("You cant submit a review for your own spot")
+    err.status = 404
+    err.title = "You can not submit a review for a spot you own"
+    err.message = "You can not submit a review for a spot you own"
+    return next(err)
+  }
+  //if no errors, post the review
+  else {
+    const reviewPost = await Review.create({
+      userId: userId,
+      spotId: parseInt(spotId),
+      review,
+      stars
+    })
+    res.status(201).json(reviewPost)
+  }
+})
+
 module.exports = router;
