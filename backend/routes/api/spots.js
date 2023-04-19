@@ -122,7 +122,19 @@ router.get('/current', requireAuth, async (req, res, next) => {
 router.get('/:spotId', async (req, res, next) => {
   const id = req.params.spotId
 
-  const spot = await Spot.findByPk(id)
+  const spot = await Spot.findByPk(id, {
+    include: [
+      {
+        model: SpotImage,
+        attributes: ['id', 'url', 'preview']
+      },
+      {
+        model: User,
+        as: 'Owner',
+        attributes: ['id', 'firstName', 'lastName']
+      }
+    ]
+  })
 
   if (!spot) {
     let err = new Error('Spot does not exist')
@@ -341,7 +353,7 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
     next(err)
   } else {
     await spot.destroy()
-    res.status(200).json({message: 'Successfully deleted'})
+    res.status(200).json({ message: 'Successfully deleted' })
   }
 })
 

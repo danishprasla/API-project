@@ -60,7 +60,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
     } else { //if there is a preview image
       review.dataValues.Spot.dataValues.previewImage = previewImage.url
     }
-    console.log(review)
+    // console.log(review)
   }
   res.status(200).json({ Reviews: reviews })
 })
