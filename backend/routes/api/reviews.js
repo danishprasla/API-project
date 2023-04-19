@@ -137,6 +137,7 @@ const validateComment = [
   handleValidationErrors
 ];
 
+//update review
 router.put('/:reviewId', [requireAuth, validateComment], async (req, res, next) => {
   const { review, stars } = req.body
 
@@ -161,11 +162,39 @@ router.put('/:reviewId', [requireAuth, validateComment], async (req, res, next) 
     return next(err)
   }
 
-  if(review) userReview.review = review
-  if(stars) userReview.stars = stars
+  if (review) userReview.review = review
+  if (stars) userReview.stars = stars
   await userReview.save()
   res.status(200).json(userReview)
+})
 
+//delete review
+router.delete('/:reviewId', [requireAuth], async (req, res, next) => {
+  const reviewId = req.params.reviewId
+  const userId = req.user.id
+  const review = await Review.findByPk(reviewId)
+//check if the review exists
+  if (!review) {
+    let err = new Error('Review does not exist')
+    err.title = "Review couldn't be found"
+    err.message = "Review couldn't be found"
+    err.status = 404
+    return next(err)
+  }
+//check if review belongs to logged in user
+  else if (review.userId !== userId) {
+    let err = new Error('Cannot delete review')
+    err.title = "Review doesn't belong to you"
+    err.message = "Review doesn't belong to you"
+    err.status = 404
+    return next(err)
+  }
+
+  //destroy review if no errors
+  else {
+    review.destroy()
+    res.status(200).json({ message: 'Successfully deleted' })
+  }
 })
 
 
