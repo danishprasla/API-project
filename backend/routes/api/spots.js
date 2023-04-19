@@ -60,7 +60,7 @@ router.get('/', async (req, res, next) => {
     // console.log('preview image', previewImage)
 
     // console.log(previewImage.url)
-    if(!previewImage){
+    if (!previewImage) {
       spot.dataValues.previewImage = 'This spot does not have a preview image yet'
     } else {
       spot.dataValues.previewImage = previewImage.url
@@ -108,8 +108,8 @@ router.get('/current', requireAuth, async (req, res, next) => {
         preview: true
       }
     })
-    
-    if(!previewImage){
+
+    if (!previewImage) {
       spot.dataValues.previewImage = 'This spot does not have a preview image yet'
     } else {
       spot.dataValues.previewImage = previewImage.url
@@ -194,11 +194,11 @@ const validateSpotPost = [
     .withMessage('Country is required'),
   check('lat')
     .exists({ checkFalsy: true })
-    .isFloat({checkFalsy: true, max: 90, min: -90})  
+    .isFloat({ checkFalsy: true, max: 90, min: -90 })
     .withMessage('Latitude is not valid'),
   check('lng')
     .exists({ checkFalsy: true })
-    .isFloat({checkFalsy: true, max: 180, min: -180})
+    .isFloat({ checkFalsy: true, max: 180, min: -180 })
     .withMessage('Longitude is not valid'),
   check('name')
     .exists({ checkFalsy: true })
@@ -209,7 +209,7 @@ const validateSpotPost = [
     .withMessage('Description is required'),
   check('price')
     .exists({ checkFalsy: true })
-    .isNumeric({checkFalsy: true})
+    .isNumeric({ checkFalsy: true })
     .withMessage('Price per day is required'),
   handleValidationErrors
 ];
@@ -236,9 +236,41 @@ router.post('/', [requireAuth, validateSpotPost], async (req, res, next) => {
 })
 
 
-// router.post('/:spotId/images', requireAuth, async (req, res, next) => {
-//   let userId = req.user.id
-  
-// })
+const validateSpotImagePost = [
+  check('url')
+    .exists({ checkFalsy: true })
+    .isURL({ checkFalsy: true })
+    .withMessage('Invalid URL'),
+  check('preview')
+    .exists({ checkFalsy: true })
+    .isBoolean({checkFalsy: true})
+    .withMessage('Please enter true or false'),
+  handleValidationErrors
+];
+
+router.post('/:spotId/images', [requireAuth, validateSpotImagePost], async (req, res, next) => {
+
+  const { url, preview } = req.body
+  let userId = req.user.id
+  let spotId = req.params.spotId
+  let spot = await Spot.findByPk(spotId)
+  if (!spot) {
+    return res.status(404).json({ message: "Spot couldn't be found" })
+  } else if (spot.ownerId !== userId) {
+    return res.status(403).json({ message: 'Forbidden. Spot must belong to you.' })
+  } else {
+    const spotImage = await SpotImage.create({
+      spotId: spotId,
+      url,
+      preview
+    })
+    return res.status(200).json({
+      id: spotImage.id,
+      url: spotImage.url,
+      preview: spotImage.preview
+    })
+  }
+
+})
 
 module.exports = router;
