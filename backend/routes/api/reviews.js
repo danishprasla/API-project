@@ -88,7 +88,7 @@ router.post('/:reviewId/images', [requireAuth, validateReviewImage], async (req,
   })
 
   const { url } = req.body
-//check if the review id exists
+  //check if the review id exists
   if (!review) {
     let err = new Error('Review not found')
     err.title = "Review couldn't be found"
@@ -104,7 +104,7 @@ router.post('/:reviewId/images', [requireAuth, validateReviewImage], async (req,
     err.title = "Cannot edit a review belonging to someone else"
     return next(err)
   }
-//check if the amount of images on the review -- if 10 or more, then don't submit the image
+  //check if the amount of images on the review -- if 10 or more, then don't submit the image
   else if (reviewImages.length >= 10) {
     let err = new Error('Maximum amount of images reached')
     err.status = 403
@@ -112,7 +112,7 @@ router.post('/:reviewId/images', [requireAuth, validateReviewImage], async (req,
     err.message = 'Maximum number of images for this resource was reached'
     return next(err)
   }
-//if no errors, submit the image onto the review
+  //if no errors, submit the image onto the review
   else {
     let reviewImage = await ReviewImage.create({
       reviewId: parseInt(reviewId),
@@ -123,6 +123,49 @@ router.post('/:reviewId/images', [requireAuth, validateReviewImage], async (req,
       url: reviewImage.url
     })
   }
+})
+
+const validateComment = [
+  check('review')
+    .exists({ checkFalsy: true })
+    .isLength({ min: 4 })
+    .withMessage('Review text is required.'),
+  check('stars')
+    .exists({ checkFalsy: true })
+    .isInt({ checkFalsy: true, max: 5, min: 1 })
+    .withMessage('Stars must be an integer from 1 to 5'),
+  handleValidationErrors
+];
+
+router.put('/:reviewId', [requireAuth, validateComment], async (req, res, next) => {
+  const { review, stars } = req.body
+
+  const userId = req.user.id
+  const reviewId = req.params.reviewId
+  const userReview = await Review.findByPk(reviewId)
+  // const spotId = userReview.spotId
+
+  if (!userReview) {
+    let err = new Error('Review not found')
+    err.title = "Review couldn't be found"
+    err.message = "Review couldn't be found"
+    err.status = 404
+    return next(err)
+  }
+
+  else if (userReview.userId !== userId) {
+    let err = new Error('Cannot edit review')
+    err.title = "Review doesn't belong to you"
+    err.message = "Review doesn't belong to you"
+    err.status = 404
+    return next(err)
+  }
+
+  if(review) userReview.review = review
+  if(stars) userReview.stars = stars
+  await userReview.save()
+  res.status(200).json(userReview)
+
 })
 
 
