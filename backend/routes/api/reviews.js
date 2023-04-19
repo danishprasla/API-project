@@ -173,7 +173,7 @@ router.delete('/:reviewId', [requireAuth], async (req, res, next) => {
   const reviewId = req.params.reviewId
   const userId = req.user.id
   const review = await Review.findByPk(reviewId)
-//check if the review exists
+  //check if the review exists
   if (!review) {
     let err = new Error('Review does not exist')
     err.title = "Review couldn't be found"
@@ -181,7 +181,7 @@ router.delete('/:reviewId', [requireAuth], async (req, res, next) => {
     err.status = 404
     return next(err)
   }
-//check if review belongs to logged in user
+  //check if review belongs to logged in user
   else if (review.userId !== userId) {
     let err = new Error('Cannot delete review')
     err.title = "Review doesn't belong to you"

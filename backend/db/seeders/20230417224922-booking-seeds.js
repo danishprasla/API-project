@@ -13,38 +13,39 @@ module.exports = {
       {
         spotId: 2,
         userId: 1,
-        startDate: '04-17-2023',
-        endDate: '04-20-2023'
+        
+        startDate: new Date('2023-04-17'),
+        endDate: new Date ('2023-04-20')
       },
       {
         spotId: 1,
         userId: 2,
-        startDate: '2023-05-01',
-        endDate: '2023-05-07'
+        startDate: new Date ('2023-05-01'),
+        endDate: new Date ('2023-05-07')
       },
       {
         spotId: 2,
         userId: 5,
-        startDate: '2023-05-15',
-        endDate: '2023-05-18'
+        startDate: new Date ('2023-05-15'),
+        endDate: new Date ('2023-05-18')
       },
       {
         spotId: 3,
         userId: 5,
-        startDate: '2023-06-01',
-        endDate: '2023-06-07'
+        startDate: new Date ('2023-06-01'),
+        endDate: new Date ('2023-06-07')
       },
       {
         spotId: 2,
         userId: 2,
-        startDate: '2023-07-01',
-        endDate: '2023-07-07'
+        startDate: new Date ('2023-07-01'),
+        endDate: new Date ('2023-07-07')
       },
       {
         spotId: 4,
         userId: 5,
-        startDate: '2023-08-01',
-        endDate: '2023-08-07'
+        startDate: new Date ('2023-08-01'),
+        endDate: new Date ('2023-08-07')
       }
     ])
   },
