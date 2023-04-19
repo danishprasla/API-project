@@ -125,12 +125,12 @@ router.get('/:id', async (req, res, next) => {
   const spot = await Spot.findByPk(id)
 
   if (!spot) {
-    // let err = new Error('Spot does not exist')
-    // err.status = 404
-    // err.title = 'Spot not found'
-    // err.message = "Spot couldn't be found"
-    // next(err)
-    return res.status(404).json({ message: "Spot couldn't be found" })
+    let err = new Error('Spot does not exist')
+    err.status = 404
+    err.title = 'Spot not found'
+    err.message = "Spot couldn't be found"
+    next(err)
+    // return res.status(404).json({ message: "Spot couldn't be found" })
   }
   const starSum = await Review.sum('stars', {
     where: {
@@ -255,9 +255,17 @@ router.post('/:spotId/images', [requireAuth, validateSpotImagePost], async (req,
   let spotId = req.params.spotId
   let spot = await Spot.findByPk(spotId)
   if (!spot) {
-    return res.status(404).json({ message: "Spot couldn't be found" })
+    let err = new Error('Spot does not exist')
+    err.status = 404
+    err.title = 'Spot not found'
+    err.message = "Spot couldn't be found"
+    next(err)
   } else if (spot.ownerId !== userId) {
-    return res.status(403).json({ message: 'Forbidden. Spot must belong to you.' })
+    let err = new Error('Spot does not belong to you')
+    err.status = 403
+    err.title = 'Forbidden'
+    err.message = "The spot does not belong to you"
+    next(err)
   } else {
     const spotImage = await SpotImage.create({
       spotId: spotId,
@@ -270,7 +278,6 @@ router.post('/:spotId/images', [requireAuth, validateSpotImagePost], async (req,
       preview: spotImage.preview
     })
   }
-
 })
 
 module.exports = router;
