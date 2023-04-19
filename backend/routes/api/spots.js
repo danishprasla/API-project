@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, SpotImage, Review, User } = require('../../db/models');
+const { Spot, SpotImage, Review, User, ReviewImage } = require('../../db/models');
 const { check } = require('express-validator')
 const { handleValidationErrors } = require('../../utils/validation');
 const spot = require('../../db/models/spot');
@@ -309,13 +309,13 @@ router.put('/:spotId', [requireAuth, validateSpotPost], async (req, res, next) =
     err.status = 404
     err.title = 'Spot not found'
     err.message = "Spot couldn't be found"
-    next(err)
+    return next(err)
   } else if (spot.ownerId !== userId) { //check if spot belongs to logged in user
     let err = new Error('Spot does not belong to you')
     err.status = 403
     err.title = 'Forbidden'
     err.message = "The spot does not belong to you"
-    next(err)
+    return next(err)
   }
 
   if (address) spot.address = address
@@ -344,17 +344,48 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
     err.status = 404
     err.title = 'Spot not found'
     err.message = "Spot couldn't be found"
-    next(err)
+    return next(err)
   } else if (spot.ownerId !== userId) { //check if spot belongs to logged in user
     let err = new Error('Spot does not belong to you')
     err.status = 403
     err.title = 'Forbidden'
     err.message = "The spot does not belong to you"
-    next(err)
+    return next(err)
   } else {
     await spot.destroy()
     res.status(200).json({ message: 'Successfully deleted' })
   }
+})
+
+router.get('/:spotId/reviews', requireAuth, async (req, res, next) => {
+  const spotId = req.params.spotId
+  const spot = await Spot.findByPk(spotId)
+
+  console.log(spot)
+  if (!spot) {
+    let err = new Error("Spot couldn't be found")
+    err.title = 'Spot not found'
+    err.message = "Spot couldn't be found"
+    err.status = 404
+    return next(err)
+  }
+
+  const reviews = await Review.findAll({
+    where: {
+      spotId: spot.id
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'firstName', 'lastName']
+      },
+      {
+        model: ReviewImage,
+        attributes: ['id', 'url']
+      }
+    ]
+  })
+  res.status(200).json(reviews)
 })
 
 module.exports = router;
