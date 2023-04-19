@@ -202,6 +202,7 @@ const validateSpotPost = [
     .withMessage('Longitude is not valid'),
   check('name')
     .exists({ checkFalsy: true })
+    .withMessage('Name must be less than 50 characters')
     .isLength({ max: 50 })
     .withMessage('Name must be less than 50 characters'),
   check('description')
@@ -316,6 +317,32 @@ router.put('/:spotId', [requireAuth, validateSpotPost], async (req, res, next) =
 
   await spot.save()
   res.status(200).json(spot)
+})
+
+router.delete('/:spotId', requireAuth, async (req, res, next) => {
+
+  let userId = req.user.id
+  let spotId = req.params.spotId
+  let spot = await Spot.findByPk(spotId)
+
+  //check if spot exists based off id
+  if (!spot) {
+    let err = new Error('Spot does not exist')
+    err.status = 404
+    err.title = 'Spot not found'
+    err.message = "Spot couldn't be found"
+    next(err)
+  } else if (spot.ownerId !== userId) { //check if spot belongs to logged in user
+    let err = new Error('Spot does not belong to you')
+    err.status = 403
+    err.title = 'Forbidden'
+    err.message = "The spot does not belong to you"
+    next(err)
+  } else {
+    await spot.destroy()
+    res.status(200).json({message: 'Successfully deleted'})
+  }
+
 })
 
 module.exports = router;
