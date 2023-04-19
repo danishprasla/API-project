@@ -281,7 +281,7 @@ router.post('/:spotId/images', [requireAuth, validateSpotImagePost], async (req,
 })
 
 //edit a spot id
-router.put(':spotId', [requireAuth, validateSpotPost], async (req, res, next) => {
+router.put('/:spotId', [requireAuth, validateSpotPost], async (req, res, next) => {
 
   const { address, city, state, country, lat, lng, name, description, price } = req.body
 
@@ -313,6 +313,9 @@ router.put(':spotId', [requireAuth, validateSpotPost], async (req, res, next) =>
   if (name) spot.name = name
   if (description) spot.description = description
   if (price) spot.price = price
+
+  await spot.save()
+  res.status(200).json(spot)
 })
 
 module.exports = router;
