@@ -11,7 +11,7 @@ const spot = require('../../db/models/spot');
 const router = express.Router();
 
 
-
+//get booking for current user
 router.get('/current', requireAuth, async (req, res, next) => {
   const userId = req.user.id
   const bookings = await Booking.findAll({
@@ -51,12 +51,14 @@ router.get('/current', requireAuth, async (req, res, next) => {
       booking.dataValues.Spot.dataValues.previewImage = previewImage.url
     }
 
-    //start date split
+    //start date split to return YYYY-MM-DD
     let startDateRaw = booking.startDate
     let endDateRaw = booking.endDate
-    // let startDate = startDateRaw.split('T')
     let startDate = startDateRaw.toJSON().split('T')[0]
     let endDate = endDateRaw.toJSON().split('T')[0]
+
+    // createdDate = (booking.createdAt).toUTCString()
+    // console.log(createdDate)
 
     booking.dataValues.startDate = startDate
     booking.dataValues.endDate = endDate
