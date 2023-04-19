@@ -42,7 +42,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
       }
     ]
   })
-  if (!reviews) return res.status(200).res.json({message: "This user currently does not have any reviews"})
+  if (!reviews) return res.status(200).res.json({ message: "This user currently does not have any reviews" })
   //add preview image property onto the Spot obj in the review obj
   for (let review of reviews) {
     //get the spotId and search SpotImage.findOne with id
@@ -65,8 +65,65 @@ router.get('/current', requireAuth, async (req, res, next) => {
   res.status(200).json({ Reviews: reviews })
 })
 
+const validateReviewImage = [
+  check('url')
+    .exists({ checkFalsy: true })
+    .withMessage('Must submit a valid url for the image')
+    .isURL({ checkFalsy: true })
+    .withMessage('Must submit a valid url for the image'),
+  handleValidationErrors
+];
 
+//add image to a review based on review's id
+router.post('/:reviewId/images', [requireAuth, validateReviewImage], async (req, res, next) => {
+  const userId = req.user.id
+  const reviewId = req.params.reviewId
+  const review = await Review.findByPk(reviewId)
 
+  //to get the images that already belong to a review
+  const reviewImages = await ReviewImage.findAll({
+    where: {
+      reviewId
+    }
+  })
+
+  const { url } = req.body
+//check if the review id exists
+  if (!review) {
+    let err = new Error('Review not found')
+    err.title = "Review couldn't be found"
+    err.message = "Review couldn't be found"
+    err.status = 404
+    return next(err)
+  }
+  //check if the review belogns to someone else
+  else if (review.userId !== userId) {
+    let err = new Error('Cannot edit a review belonging to someone else')
+    err.status = 404
+    err.message = "Cannot edit a review belonging to someone else"
+    err.title = "Cannot edit a review belonging to someone else"
+    return next(err)
+  }
+//check if the amount of images on the review -- if 10 or more, then don't submit the image
+  else if (reviewImages.length >= 10) {
+    let err = new Error('Maximum amount of images reached')
+    err.status = 403
+    err.title = 'Maximum number of images for this resource was reached'
+    err.message = 'Maximum number of images for this resource was reached'
+    return next(err)
+  }
+//if no errors, submit the image onto the review
+  else {
+    let reviewImage = await ReviewImage.create({
+      reviewId: parseInt(reviewId),
+      url
+    })
+    res.status(200).json({
+      id: reviewImage.id,
+      url: reviewImage.url
+    })
+  }
+})
 
 
 module.exports = router;
