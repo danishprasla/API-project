@@ -12,9 +12,130 @@ const spot = require('../../db/models/spot');
 const router = express.Router();
 
 
-router.get('/', async (req, res, next) => {
-  const spots = await Spot.findAll({
 
+router.get('/', async (req, res, next) => {
+
+  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query
+
+  let queryErrors = {}
+  if (page) {
+    if (parseInt(page) <= 10 && parseInt(page) >= 1) {
+      page = parseInt(page)
+    } else {
+      queryErrors.page = "Page must be greater than or equal to 1"
+    }
+  } else page = 1
+  //check if size query exists
+  if (size) {
+    if (parseInt(size) <= 20 && parseInt(size) >= 1) {
+      size = parseInt(size)
+    } else {
+      queryErrors.size = "Size must be greater than or equal to 1"
+    }
+  } else size = 20
+
+  if (minLat) {
+    if (parseInt(minLat) < -90 || isNaN(parseInt(minLat))) {
+      queryErrors.minLat = "Minimum latitude is invalid"
+    }
+  } else minLat = parseInt(minLat)
+
+  if (maxLat) {
+    if (parseInt(maxLat) > 90 || isNaN(parseInt(maxLat))) {
+      queryErrors.maxLat = "Maximum latitude is invalid"
+    }
+  } else maxLat = parseInt(maxLat)
+
+  if (minLng) {
+    if (parseInt(minLng) < -180 || isNaN(parseInt(minLng))) {
+      queryErrors.minLng = "Minimum longitude is invalid"
+    }
+  } else minLng = parseInt(minLng)
+
+  if (maxLng) {
+    if (parseInt(maxLng) > 180 || isNaN(parseInt(maxLng))) {
+      queryErrors.maxLng = "Maximum longitude is invalid"
+    }
+  } else maxLng = parseInt(maxLng)
+
+  if (minPrice) {
+    if (parseInt(minPrice) < 0 || isNaN(parseInt(minPrice))) {
+      queryErrors.minPrice = "Minimum price must be greater than or equal to 0"
+    }
+  } else minPrice = parseInt(minPrice)
+
+  if (maxPrice) {
+    if (parseInt(maxPrice) < 0 || isNaN(parseInt(maxPrice))) {
+      queryErrors.maxPrice = "Maximum price must be greater than or equal to 0"
+    }
+  } else maxPrice = parseInt(maxPrice)
+
+  //check if the queryErrors object has been populated -- return err if it has
+  if (Object.keys(queryErrors).length >= 1) {
+    let err = new Error('Bad Request')
+    err.message = "Bad Request"
+    err.errors = {
+      ...queryErrors
+    }
+    return next(err)
+  }
+  let params = {}
+  let where = {}
+
+  params.limit = size
+  params.offset = size * (page - 1)
+
+  if (maxLat && minLat) {
+    where.lat = {
+      [Op.between]: [minLat, maxLat]
+    }
+  } else {
+    if (maxLat) {
+      where.lat = {
+        [Op.lte]: maxLat
+      }
+    } if (minLat) {
+      where.lat = {
+        [Op.gte]: minLat
+      }
+    }
+  }
+
+  if (maxLng && minLng) {
+    where.lng = {
+      [Op.between]: [minLng, maxLng]
+    }
+  } else {
+    if (maxLng) {
+      where.lng = {
+        [Op.lte]: maxLng
+      }
+    } if (minLng) {
+      where.lng = {
+        [Op.gte]: minLng
+      }
+    }
+  }
+
+  if (maxPrice && minPrice) {
+    where.price = {
+      [Op.between]: [minPrice, maxPrice]
+    }
+  } else {
+    if (maxPrice) {
+      where.price = {
+        [Op.lte]: maxPrice
+      }
+    } if (minPrice) {
+      where.price = {
+        [Op.gte]: minPrice
+      }
+    }
+  }
+
+  const spots = await Spot.findAll({
+    where,
+    ...params
   })
   //itterate through the array -- spot = obj
   for (let spot of spots) {
@@ -554,20 +675,20 @@ router.post('/:spotId/bookings', [requireAuth, validateBooking], async (req, res
     err.status = 404
     return next(err)
   }
-  if(spot.ownerId === userId) {
-    let err = new Error ('Bad request')
+  if (spot.ownerId === userId) {
+    let err = new Error('Bad request')
     err.status = 400
     err.message = 'You cannot create a booking for a spot you own.'
     err.title = 'You cannot create a booking for a spot you own.'
-    return next (err)
+    return next(err)
   }
-//get the current date
+  //get the current date
   let currDate = new Date();
   let currDateRaw = (new Date((currDate).toDateString())).getTime()
-  
+
 
   if (startDateRaw.getTime() < currDateRaw || endDateRaw.getTime() < currDateRaw) {
-    let err = new Error ('Bad request')
+    let err = new Error('Bad request')
     err.status = 400
     err.message = "Cannot create a booking for past days"
     err.title = "Cannot create a booking for past days"
