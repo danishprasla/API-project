@@ -188,7 +188,11 @@ router.get('/', async (req, res, next) => {
     }
     // console.log(spot)
   }
-  res.status(200).json({ Spots: spots })
+  res.status(200).json({
+    Spots: spots,
+    page: page,
+    size: size
+  })
 })
 
 
