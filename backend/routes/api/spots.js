@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, SpotImage, Review, User, ReviewImage } = require('../../db/models');
+const { Spot, SpotImage, Review, User, ReviewImage, Booking } = require('../../db/models');
 const { check } = require('express-validator')
 const { handleValidationErrors } = require('../../utils/validation');
 const spot = require('../../db/models/spot');
@@ -454,6 +454,71 @@ router.post('/:spotId/reviews', [requireAuth, validateComment], async (req, res,
       stars
     })
     res.status(201).json(reviewPost)
+  }
+})
+
+//get bookings based off spot id
+
+router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
+  let userId = req.user.id
+  let spotId = req.params.spotId
+  const spot = await Spot.findOne({
+    where: {
+      id: spotId
+    }
+  })
+
+  //check if spot exists
+  if(!spot) {
+    let err = new Error ('Spot not found')
+    err.status = 404
+    err.title = "Spot couldn't be found"
+    err.message = "Spot couldn't be found"
+    return next(err)
+  }
+
+  if (spot.ownerId !== userId) {
+    const bookings = await Booking.findAll({
+      where: {
+        spotId: spotId
+      },
+      attributes: ['spotId', 'startDate', 'endDate']
+    })
+    //Change the format of the startDate and endDate below
+    for (let booking of bookings) {
+      let startDateRaw = booking.startDate
+      let endDateRaw = booking.endDate
+      let startDate = startDateRaw.toJSON().split('T')[0]
+      let endDate = endDateRaw.toJSON().split('T')[0]
+
+      booking.dataValues.startDate = startDate
+      booking.dataValues.endDate = endDate
+    }
+
+    res.status(200).json(bookings)
+  } else {
+    const bookings = await Booking.findAll({
+      where: {
+        spotId: spotId
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'firstName', 'lastName']
+        }
+      ]
+    })
+    for (let booking of bookings) {
+      let startDateRaw = booking.startDate
+      let endDateRaw = booking.endDate
+      let startDate = startDateRaw.toJSON().split('T')[0]
+      let endDate = endDateRaw.toJSON().split('T')[0]
+
+      booking.dataValues.startDate = startDate
+      booking.dataValues.endDate = endDate
+    }
+
+    res.status(200).json(bookings)
   }
 })
 
