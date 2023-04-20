@@ -191,6 +191,44 @@ router.put('/:bookingId', [requireAuth, validateBooking], async (req, res, next)
   userBooking.dataValues.endDate = adjEndDate
 
   res.status(200).json(userBooking)
+})
 
+router.delete('/:bookingId', requireAuth, async (req, res, next) => {
+  const userId = req.user.id
+  const bookingId = req.params.bookingId
+  const userBooking = await Booking.findByPk(bookingId)
+
+  if (!userBooking) {
+    let err = new Error('Booking not found')
+    err.status = 404
+    err.message = "Booking couldn't be found"
+    err.title = "Booking couldn't be found"
+    return next(err)
+  }
+
+  if (userBooking.userId !== userId) {
+    let err = new Error('Bad Request')
+    err.message = 'Booking does not belong to you'
+    err.title = 'Booking does not belong to you'
+    err.status = 400
+    return next(err)
+  }
+
+  let currDate = new Date();
+  let currDateRaw = (new Date((currDate).toDateString())).getTime()
+
+  let startDateRaw = (new Date((userBooking.startDate).toDateString())).getTime()
+  // let endDateRaw = (new Date((userBooking.endDate).toDateString())).getTime()
+
+  if (startDateRaw < currDateRaw) {
+    let err = new Error('Invalid request')
+    err.status = 403
+    err.message = "Bookings that have been started can't be deleted"
+    err.title = "Bookings that have been started can't be deleted"
+    return next(err)
+  }
+
+  await userBooking.destroy()
+  res.status(200).json({ message: "Successfully deleted" })
 })
 module.exports = router;
