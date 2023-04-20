@@ -469,8 +469,8 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
   })
 
   //check if spot exists
-  if(!spot) {
-    let err = new Error ('Spot not found')
+  if (!spot) {
+    let err = new Error('Spot not found')
     err.status = 404
     err.title = "Spot couldn't be found"
     err.message = "Spot couldn't be found"
@@ -495,7 +495,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
       booking.dataValues.endDate = endDate
     }
 
-    res.status(200).json(bookings)
+    res.status(200).json({ Bookings: bookings })
   } else {
     const bookings = await Booking.findAll({
       where: {
@@ -518,8 +518,130 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
       booking.dataValues.endDate = endDate
     }
 
-    res.status(200).json(bookings)
+    res.status(200).json({ Bookings: bookings })
   }
+})
+
+const validateBooking = [
+  check('startDate')
+    .exists({ checkFalsy: true })
+    .withMessage('Invalid date format. Must be YYYY-MM-DD')
+    .isISO8601()
+    .withMessage('Invalid date format. Must be YYYY-MM-DD'),
+  check('endDate')
+    .exists({ checkFalsy: true })
+    .withMessage('Invalid date format. Must be YYYY-MM-DD')
+    .isISO8601()
+    .withMessage('Invalid date format. Must be YYYY-MM-DD'),
+  handleValidationErrors
+];
+
+router.post('/:spotId/bookings', [requireAuth, validateBooking], async (req, res, next) => {
+  const { startDate, endDate } = req.body
+  const userId = req.user.id
+  const spotId = req.params.spotId
+
+  let startDateRaw = new Date(startDate)
+  let endDateRaw = new Date(endDate)
+
+  let spot = await Spot.findByPk(spotId)
+
+  //check if spot exists
+  if (!spot) {
+    let err = new Error('Spot not found')
+    err.message = "Spot couldn't be found"
+    err.title = "Spot couldn't be found"
+    err.status = 404
+    return next(err)
+  }
+  if(spot.ownerId === userId) {
+    let err = new Error ('Bad request')
+    err.status = 400
+    err.message = 'You cannot create a booking for a spot you own.'
+    err.title = 'You cannot create a booking for a spot you own.'
+    return next (err)
+  }
+//get the current date
+  let currDate = new Date();
+  let currDateRaw = (new Date((currDate).toDateString())).getTime()
+  
+
+  if (startDateRaw.getTime() < currDateRaw || endDateRaw.getTime() < currDateRaw) {
+    let err = new Error ('Bad request')
+    err.status = 400
+    err.message = "Cannot create a booking for past days"
+    err.title = "Cannot create a booking for past days"
+    return next(err)
+  }
+
+
+  //get all current bookings for the spot
+  const bookings = await Booking.findAll({
+    where: {
+      spotId: spotId
+    }
+  })
+
+  if (startDateRaw.getTime() >= endDateRaw.getTime()) {
+    let err = new Error('Bad request')
+    err.status = 400
+    err.message = 'End date cannot be on or before the start date'
+    err.errors = {
+      endDate: "endDate cannot be on or before startDate"
+    }
+    return next(err)
+  }
+
+  //check if there are conflicting bookings
+  for (let booking of bookings) {
+
+    //this is getting the dates for the bookings, "removing" the time and converting to a string then getting a new Date value based off the output then finally calling the .getTime method to convert it to a integer to compare 
+
+    let startDate = (new Date((booking.startDate).toDateString())).getTime()
+    let endDate = (new Date((booking.endDate).toDateString())).getTime()
+
+    //conditional checking if the start date falls between an already existing booking
+
+    let errorObj = {}
+
+    if (startDateRaw.getTime() >= startDate && startDateRaw.getTime() <= endDate) {
+      errorObj.startDate = "Start date conflicts with an existing booking"
+    }
+
+    //checking if the startdate falls between an already existing booking
+    if (endDateRaw.getTime() >= startDate && endDateRaw.getTime() <= endDate) {
+      errorObj.endDate = "End date conflicts with an existing booking"
+    }
+    //check if key(s) inside errorObj  exist -- if true, it means at least one of the above 2 errors were hit --> end op with error
+    if (Object.keys(errorObj).length >= 1) {
+      let err = new Error('Booking conflict')
+      err.message = 'Sorry this spot is already booked for the specified date(s)'
+      err.title = 'Booking Conflict'
+      err.status = 403
+      err.errors = {
+        ...errorObj
+      }
+      return next(err)
+    }
+  }
+
+  let newBooking = await Booking.create({
+    userId: userId,
+    spotId: parseInt(spotId),
+    startDate: new Date(startDate),
+    endDate: new Date(endDate)
+  })
+
+  //adjust to yyyy-mm-dd format
+  let startDateAdj = newBooking.startDate
+  let endDateAdj = newBooking.endDate
+  let adjStartDate = startDateAdj.toJSON().split('T')[0]
+  let adjEndDate = endDateAdj.toJSON().split('T')[0]
+
+  newBooking.dataValues.startDate = adjStartDate
+  newBooking.dataValues.endDate = adjEndDate
+
+  res.status(200).json(newBooking)
 })
 
 
