@@ -35,6 +35,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
     err.status = 404
     return next(err)
   }
+  //itterate through bookings to add the preview image
   for (let booking of bookings) {
     let spotId = booking.spotId
     // console.log(spotId)
