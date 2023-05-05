@@ -4,14 +4,15 @@ import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
+import SignupFormModal from "../SignupFormModal";
 import "./Navigation.css";
 
 function Navigation({ isLoaded }) {
-  //check to see if a user is logged in
   const sessionUser = useSelector((state) => state.session.user);
+  //check if a usersession exists (if user is logged in)
 
   let sessionLinks;
-  //if a user is logged in, render profile button with user info
+  //if user is logged in, render profile button with prop named user with userinfo being passed to the profilebutton comp
   if (sessionUser) {
     sessionLinks = (
       <li>
@@ -19,14 +20,16 @@ function Navigation({ isLoaded }) {
       </li>
     );
   } else {
-    //if no user is logged in, render login and signup options
     sessionLinks = (
       <li>
         <OpenModalButton
           buttonText="Log In"
           modalComponent={<LoginFormModal />}
         />
-        <NavLink to="/signup">Sign Up</NavLink>
+        <OpenModalButton
+          buttonText="Sign Up"
+          modalComponent={<SignupFormModal />}
+        />
       </li>
     );
   }
