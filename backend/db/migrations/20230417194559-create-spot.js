@@ -49,11 +49,11 @@ module.exports = {
       },
       lat: {
         type: Sequelize.DECIMAL(9, 6),
-        allowNull: false
+        allowNull: true
       },
       lng: {
         type: Sequelize.DECIMAL(9, 6),
-        allowNull: false
+        allowNull: true
       },
       name: {
         type: Sequelize.STRING,
