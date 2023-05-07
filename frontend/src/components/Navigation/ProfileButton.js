@@ -9,6 +9,7 @@ function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
+  //useRef allows you to persist data through renders
 
   const openMenu = () => {
     if (showMenu) return;
@@ -17,10 +18,12 @@ function ProfileButton({ user }) {
 
   useEffect(() => {
     if (!showMenu) return;
+    //if the menu is disabled, dont do anything in useEffect
 
     const closeMenu = (e) => {
       if (!ulRef.current.contains(e.target)) {
         setShowMenu(false);
+        //if the user clicks outside of the window, close the menu
       }
     };
 
@@ -38,7 +41,10 @@ function ProfileButton({ user }) {
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  //set the class name for the ul drop down menu items.
+  //if showMenu is true, dont add another class name. If it's false, add hidden which triggers the css property on Navigation.css to set the display to false
 
+  //component is always rendering the profile icon and is always rending the ul element which however may not be displayed if the showMenu is false. The ul will display the user info IF user exists otherwise it will display the login and logout options
   return (
     <>
       <button onClick={openMenu}>
