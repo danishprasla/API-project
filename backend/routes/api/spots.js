@@ -160,7 +160,7 @@ router.get('/', async (req, res, next) => {
     //if the sum is null aka, there are no reviews, set the avg rating value to string
     if (starSum === null) {
       // console.log('null test')
-      spot.dataValues.avgRating = 'This location does not have any reviews'
+      spot.dataValues.avgRating = 'New'
     } else { //set avg rating to the spot obj
       // console.log('review test')
       avgRating = parseFloat((starSum / reviewCount).toFixed(1))
@@ -219,7 +219,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
       }
     })
     if (starSum === null) {
-      spot.dataValues.avgRating = 'This location does not have any reviews'
+      spot.dataValues.avgRating = 'New'
     } else {
       //set avg rating to the spot obj
       avgRating = parseFloat((starSum / reviewCount).toFixed(1))
@@ -281,7 +281,8 @@ router.get('/:spotId', async (req, res, next) => {
   })
 
   if (starSum === null) {
-    spot.dataValues.avgRating = 'This location does not have any reviews'
+    spot.dataValues.avgRating = 'New'
+    spot.dataValues.numReviews = 0
   } else {
     //set avg rating to the spot obj
     avgRating = parseFloat((starSum / reviewCount).toFixed(1))
@@ -324,11 +325,11 @@ const validateSpotPost = [
     .withMessage('City is required'),
   check('state')
     .exists({ checkFalsy: true })
-    .isLength({ min: 3 })
+    .isLength({ min: 2 })
     .withMessage('State is required'),
   check('country')
     .exists({ checkFalsy: true })
-    .isLength({ min: 6 })
+    .isLength({ min: 3 })
     .withMessage('Country is required'),
   check('lat')
     .exists({ checkFalsy: true })
@@ -412,6 +413,7 @@ router.post('/:spotId/images', [requireAuth, validateSpotImagePost], async (req,
       url,
       preview
     })
+    console.log('back end for creating spot image -->',spotImage)
     return res.status(200).json({
       id: spotImage.id,
       url: spotImage.url,
