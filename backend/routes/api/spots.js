@@ -413,6 +413,7 @@ router.post('/:spotId/images', [requireAuth, validateSpotImagePost], async (req,
       url,
       preview
     })
+    console.log('back end for creating spot image -->',spotImage)
     return res.status(200).json({
       id: spotImage.id,
       url: spotImage.url,

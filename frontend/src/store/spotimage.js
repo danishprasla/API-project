@@ -14,6 +14,7 @@ export const createSpotImageThunk = (spotImage) => async (dispatch) => {
   const spotImageBody = {}
   spotImageBody.url = spotImage.url
   spotImageBody.preview = spotImage.preview
+  console.log('value being passed into request ->', spotImageBody)
   const res = await csrfFetch(`/api/spots/${spotImage.spotId}/images`, {
     method: 'POST',
     headers: {

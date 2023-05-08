@@ -6,7 +6,7 @@ import './CreateSpotForm.css'
 import { createSpotImageThunk } from "../../store/spotimage"
 
 
-const CreateSpotFormIndex = ({spot}) => {
+const CreateSpotFormIndex = ({ spot }) => {
   const history = useHistory()
   const dispatch = useDispatch()
 
@@ -14,7 +14,7 @@ const CreateSpotFormIndex = ({spot}) => {
   const userId = useSelector(state => state.session)
 
   // console.log(userId)
-  
+
   if (userId.user === null) {
     // alert('You must be logged in to access this page... returning to home')
     history.push('/')
@@ -59,38 +59,71 @@ const CreateSpotFormIndex = ({spot}) => {
       errors.previewImage = 'Image URL must end in .png, .jpg, or .jpeg '
     } if (image1 && !previewImageCheck.some(extension => image1.endsWith(extension))) {
       errors.image1 = 'Image URL must end in .png, .jpg, or .jpeg '
-    } if (image2 && !previewImageCheck.some(extension => image1.endsWith(extension))) {
+    } if (image2 && !previewImageCheck.some(extension => image2.endsWith(extension))) {
       errors.image2 = 'Image URL must end in .png, .jpg, or .jpeg '
-    } if (image3 && !previewImageCheck.some(extension => image1.endsWith(extension))) {
+    } if (image3 && !previewImageCheck.some(extension => image3.endsWith(extension))) {
       errors.image3 = 'Image URL must end in .png, .jpg, or .jpeg '
-    } if (image4 && !previewImageCheck.some(extension => image1.endsWith(extension))) {
+    } if (image4 && !previewImageCheck.some(extension => image4.endsWith(extension))) {
       errors.image4 = 'Image URL must end in .png, .jpg, or .jpeg '
     }
     setValidationErrors(errors)
   }, [address, city, state, country, name, description, price, previewImage, image1, image2, image3, image4])
 
+  useEffect(() => {
+
+  }, [validationErrors])
 
   const onSubmit = async (e) => {
     e.preventDefault()
     setSubmittedPress(true)
     const newSpot = { address, lat: 1, lng: 1, city, state, country, name, description, price }
 
-    const previewImagePost = {previewImage, preview: true}
-    const image1Post = {image1, preview: false}
-    const image2Post = {image2, preview: false}
-    const image3Post = {image3, preview: false}
-    const image4Post = {image4, preview: false}
+    const previewImagePost = { url: previewImage, preview: true }
+    const image1Post = { url: image1, preview: false }
+    const image2Post = { url: image2, preview: false }
+    const image3Post = { url: image3, preview: false }
+    const image4Post = { url: image4, preview: false }
 
     if (!Object.values(validationErrors).length) {
       const res = await dispatch(createSpotThunk(newSpot))
       if (res.id) {
         //put postImage thunks here
         const spotId = res.id
+
         previewImagePost.spotId = spotId
         const previewImageRes = await dispatch(createSpotImageThunk(previewImagePost))
 
-        if(previewImageRes.errors) {
-          setValidationErrors({...previewImageRes.errors})
+        if (previewImageRes.errors) {
+          setValidationErrors({ ...previewImageRes.errors })
+        }
+
+        if (image1.length > 2) {
+          image1Post.spotId = spotId
+          const image1Res = await dispatch(createSpotImageThunk(image1Post))
+          if (image1Res.errors) {
+            setValidationErrors({ ...previewImageRes.errors })
+          }
+        }
+        if (image2.length > 2) {
+          image2Post.spotId = spotId
+          const image2Res = await dispatch(createSpotImageThunk(image2Post))
+          if (image2Res.errors) {
+            setValidationErrors({ ...previewImageRes.errors })
+          }
+        }
+        if (image3.length > 2) {
+          image3Post.spotId = spotId
+          const image3Res = await dispatch(createSpotImageThunk(image3Post))
+          if (image3Res.errors) {
+            setValidationErrors({ ...previewImageRes.errors })
+          }
+        }
+        if (image4.length > 2) {
+          image4Post.spotId = spotId
+          const image4Res = await dispatch(createSpotImageThunk(image1Post))
+          if (image4Res.errors) {
+            setValidationErrors({ ...previewImageRes.errors })
+          }
         }
 
         history.push(`/spots/${spotId}`)
