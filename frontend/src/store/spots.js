@@ -49,13 +49,14 @@ export const loadOneSpotThunk = (spotId) => async (dispatch) => {
 //create spot thunk
 export const createSpotThunk = (spot) => async (dispatch) => {
   console.log('this is the spot from spot thunk -->', spot)
-  const res = await csrfFetch(`/api/spots`, {
+  const res = await csrfFetch('/api/spots', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(spot)
   })
+  console.log('this is the res from spot thunk -->', res)
   if (res.ok) {
     const spot = await res.json()
     dispatch(createSpot(spot))

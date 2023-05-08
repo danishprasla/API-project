@@ -1,13 +1,17 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { loadOneSpotThunk } from "../../store/spots"
-import { useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min"
 
 
 const SpotPageIndex = () => {
   const dispatch = useDispatch()
   const { spotId } = useParams()
+  // const history = useHistory()
 
+  const userId = useSelector(state => state.session.user.id)
+  // console.log('user id--->', userId)
+ 
   useEffect(() => {
     dispatch(loadOneSpotThunk(spotId))
 
@@ -24,6 +28,9 @@ const SpotPageIndex = () => {
       <h3>Loading spot...</h3>
     )
   }
+  const ownerId = spot.ownerId
+  // console.log(ownerId)
+  console.log('userId->', userId)
 
   const spotImages = spot.SpotImages || []
   const previewImage = spotImages.find(spot => spot.preview === true);
@@ -38,7 +45,6 @@ const SpotPageIndex = () => {
 
   return (
     <div className="spot">
-      SpotPage
       <h3 className="spotName">
         {spot.name}
       </h3>
@@ -78,10 +84,12 @@ const SpotPageIndex = () => {
               </div>
               <div className="reviewDetails">
                 {spot.avgRating} &#183; {spot.numReviews} reviews
-                <button
-                  className="reserveButton"
-                  onClick={() => alert('Feature Coming Soon...')}
-                > Reserve </button>
+                {userId !== ownerId && (
+                  <button
+                    className="reserveButton"
+                    onClick={() => alert('Feature Coming Soon...')}
+                  > Reserve </button>
+                )}
               </div>
             </div>
           </div>

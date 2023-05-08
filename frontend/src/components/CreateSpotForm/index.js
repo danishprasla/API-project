@@ -11,7 +11,14 @@ const CreateSpotFormIndex = ({spot}) => {
   const dispatch = useDispatch()
 
   //get the userid to add to the form submission neeeded?
-  // const userId = useSelector(state => state.session.user.id)
+  const userId = useSelector(state => state.session)
+
+  // console.log(userId)
+  
+  if (userId.user === null) {
+    // alert('You must be logged in to access this page... returning to home')
+    history.push('/')
+  }
 
   //form states
   const [address, setAddress] = useState('')
@@ -66,7 +73,7 @@ const CreateSpotFormIndex = ({spot}) => {
   const onSubmit = async (e) => {
     e.preventDefault()
     setSubmittedPress(true)
-    const newSpot = { address, city, state, country, name, description, price }
+    const newSpot = { address, lat: 1, lng: 1, city, state, country, name, description, price }
 
     const previewImagePost = {previewImage, preview: true}
     const image1Post = {image1, preview: false}

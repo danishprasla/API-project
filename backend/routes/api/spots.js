@@ -325,11 +325,11 @@ const validateSpotPost = [
     .withMessage('City is required'),
   check('state')
     .exists({ checkFalsy: true })
-    .isLength({ min: 3 })
+    .isLength({ min: 2 })
     .withMessage('State is required'),
   check('country')
     .exists({ checkFalsy: true })
-    .isLength({ min: 6 })
+    .isLength({ min: 3 })
     .withMessage('Country is required'),
   check('lat')
     .exists({ checkFalsy: true })
