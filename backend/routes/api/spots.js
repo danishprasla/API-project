@@ -160,7 +160,7 @@ router.get('/', async (req, res, next) => {
     //if the sum is null aka, there are no reviews, set the avg rating value to string
     if (starSum === null) {
       // console.log('null test')
-      spot.dataValues.avgRating = 'This location does not have any reviews'
+      spot.dataValues.avgRating = 'New'
     } else { //set avg rating to the spot obj
       // console.log('review test')
       avgRating = parseFloat((starSum / reviewCount).toFixed(1))
@@ -219,7 +219,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
       }
     })
     if (starSum === null) {
-      spot.dataValues.avgRating = 'This location does not have any reviews'
+      spot.dataValues.avgRating = 'New'
     } else {
       //set avg rating to the spot obj
       avgRating = parseFloat((starSum / reviewCount).toFixed(1))
@@ -281,7 +281,8 @@ router.get('/:spotId', async (req, res, next) => {
   })
 
   if (starSum === null) {
-    spot.dataValues.avgRating = 'This location does not have any reviews'
+    spot.dataValues.avgRating = 'New'
+    spot.dataValues.numReviews = 0
   } else {
     //set avg rating to the spot obj
     avgRating = parseFloat((starSum / reviewCount).toFixed(1))
