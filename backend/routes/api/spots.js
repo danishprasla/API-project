@@ -281,7 +281,7 @@ router.get('/:spotId', async (req, res, next) => {
   })
 
   if (starSum === null) {
-    spot.dataValues.avgRating = 'New'
+    spot.dataValues.avgStarRating = 'New'
     spot.dataValues.numReviews = 0
   } else {
     //set avg rating to the spot obj
@@ -382,7 +382,7 @@ const validateSpotImagePost = [
     .isURL({ checkFalsy: true })
     .withMessage('Invalid URL'),
   check('preview')
-    .exists({ checkFalsy: true })
+    .exists()
     .isBoolean({ checkFalsy: true })
     .withMessage('Please enter true or false'),
   handleValidationErrors
