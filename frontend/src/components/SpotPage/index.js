@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { loadAllSpotsThunk, loadOneSpotThunk } from "../../store/spots"
+import { loadOneSpotThunk } from "../../store/spots"
 import { useParams } from "react-router-dom/cjs/react-router-dom.min"
 
 

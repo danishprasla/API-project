@@ -18,6 +18,11 @@ function Navigation({ isLoaded }) {
       </li>
       {isLoaded && (
         <li>
+          {sessionUser && (
+            <NavLink className="create-new-spot" to ='/spots/new'>
+              Create a New Spot
+            </NavLink>
+          )}
           <ProfileButton user={sessionUser} />
         </li>
       )}
