@@ -47,7 +47,8 @@ function ProfileButton({ user }) {
   //component is always rendering the profile icon and is always rending the ul element which however may not be displayed if the showMenu is false. The ul will display the user info IF user exists otherwise it will display the login and logout options
   return (
     <>
-      <button onClick={openMenu}>
+      <button className="profileButton" onClick={openMenu}>
+        <i className="fa-solid fa-bars"></i>
         <i className="fas fa-user-circle" />
       </button>
       <ul className={ulClassName} ref={ulRef}>

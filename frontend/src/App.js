@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import LandingPageIndex from "./components/LandingPage";
+import SpotPageIndex from "./components/SpotPage"
 
 function App() {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ function App() {
       {isLoaded &&
         <Switch>
           <Route exact path="/" component={LandingPageIndex}/>
+          <Route path ="/spots/:spotId" component={SpotPageIndex}/>
         </Switch>
       }
     </>

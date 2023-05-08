@@ -1,3 +1,19 @@
 .hidden {
   display: none;
 }
+
+.profileButton {
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.logo {
+  transform: rotate(180deg);
+ max-width: 40px;
+}
+
+ul {
+  border-bottom: solid 2px gray;
+  list-style: none;
+}
+
