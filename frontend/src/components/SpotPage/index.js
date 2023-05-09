@@ -166,9 +166,8 @@ const SpotPageIndex = () => {
           </div>
         )}
         {reviewsArr.map((review) =>
-        (<div className="user-review">
-          {console.log('review --->'
-            , review)}
+        (<div key={review.id} className="user-review">
+
           <h4 className="review-firstname">
             {review.User.firstName}
           </h4>

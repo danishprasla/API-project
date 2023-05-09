@@ -15,6 +15,7 @@ button.reserveButton {
   background-color: #999999;
   color: white;
   box-shadow: 3px 3px 1px black;
+  cursor: pointer;
 }
 
 
