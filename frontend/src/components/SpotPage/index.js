@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { loadOneSpotThunk } from "../../store/spots"
 import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { loadSpotReviewsThunk } from "../../store/reviews"
 
 
 const SpotPageIndex = () => {
@@ -10,10 +11,14 @@ const SpotPageIndex = () => {
   // const history = useHistory()
 
   const userId = useSelector(state => state.session.user.id)
-  // console.log('user id--->', userId)
+  const reviewsObj = useSelector(state => state.reviews)
+  // const reviewsObj = Object.values(reviews.Reviews)
+  // // console.log('user id--->', userId)
+  // console.log(reviewsObj)
 
   useEffect(() => {
     dispatch(loadOneSpotThunk(spotId))
+    dispatch(loadSpotReviewsThunk(spotId))
 
   }, [dispatch])
 
@@ -23,7 +28,7 @@ const SpotPageIndex = () => {
 
 
 
-  if (!spot) {
+  if (!spot || !reviewsObj) {
     return (
       <h3>Loading spot...</h3>
     )
@@ -31,6 +36,8 @@ const SpotPageIndex = () => {
   const ownerId = spot.ownerId
   // console.log(ownerId)
   // console.log('userId->', userId)
+  console.log('reviews ->', reviewsObj)
+  const reviewsArr = Object.values(reviewsObj)
 
   const spotImages = spot.SpotImages || []
   const previewImage = spotImages.find(spot => spot.preview === true);
@@ -104,8 +111,11 @@ const SpotPageIndex = () => {
         {userId !== ownerId && (
           <button className="review-button"> Post Your Review</button>
         )}
-
-
+        {reviewsArr.map((review) => 
+        (<div>
+          test... do stuff for reviews here
+        </div>))
+        }
       </div>
     </div>
   )
