@@ -1,3 +1,21 @@
 button.reserveButton {
   border-radius: 0px;
 }
+
+.review-section>ul {
+  list-style: none;
+
+  
+}
+.review-post-button {
+  padding: 1px 5px;
+  margin: 15px 0px ;
+  border: solid black;
+  width: fit-content;
+  background-color: #999999;
+  color: white;
+  box-shadow: 3px 3px 1px black;
+}
+
+
+

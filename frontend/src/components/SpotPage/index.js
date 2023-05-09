@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from "react-redux"
 import { loadOneSpotThunk } from "../../store/spots"
 import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min"
 import { loadSpotReviewsThunk } from "../../store/reviews"
+import OpenModalMenuItem from "../Navigation/OpenModalMenuItem"
+import LoginFormModal from "../LoginFormModal"
+import './SpotPage.css'
+import ReviewFormModal from "../ReviewFormModal"
 
 const convertDate = (dateString) => {
   const date = new Date(dateString);
@@ -104,19 +108,24 @@ const SpotPageIndex = () => {
                   <h3>
                     ${spot.price} night
                   </h3>
-                  <i className="fas fa-star"></i>
-                  {spot.avgStarRating} &#183; {spot.numReviews} {spot.numReviews === 1 ? "review" : "reviews"}
+                  <div className="booking-review-section">
 
-                  <button
-                    className="reserve-button"
-                    onClick={() => alert('Feature Coming Soon...')}
-                  > Reserve </button>
+                    <i className="fas fa-star"></i>
+                    {spot.numReviews === 0 ? (
+                      spot.avgStarRating
+                    ) : `${spot.avgStarRating} \u00b7 ${spot.numReviews} ${spot.numReviews === 1 ? "review" : "reviews"}`}
+                  </div>
+                  <div className="booking-button">
 
+                    <button
+                      className="reserve-button"
+                      onClick={() => alert('Feature Coming Soon...')}
+                    > Reserve </button>
+                  </div>
                 </div>
 
               </div>
             </div>
-
           )}
         </div>
       }
@@ -124,10 +133,37 @@ const SpotPageIndex = () => {
 
         <h3>
           <i className="fas fa-star"></i>
-          {spot.avgStarRating} &#183; {spot.numReviews} {spot.numReviews === 1 ? "review" : "reviews"}
+          {spot.numReviews === 0 ? (
+            spot.avgStarRating
+          ) : `${spot.avgStarRating} \u00b7 ${spot.numReviews} ${spot.numReviews === 1 ? "review" : "reviews"}`}
+
+          {/* <i className="fas fa-star"></i>
+          {spot.avgStarRating} &#183; {spot.numReviews} {spot.numReviews === 1 ? "review" : "reviews"} */}
         </h3>
-        {(userId !== ownerId && !reviewCheck) && (
-          <button className="review-button"> Post Your Review</button>
+        {(userId !== ownerId && !reviewCheck && userId) && (
+          // <button
+          //   className="review-button"
+          //   onClick={()=> <OpenModalMenuItem
+          //     modalComponent={<LoginFormModal />}
+          //   />}
+          // >
+          //   Post Your Review
+          // </button>
+
+
+          <ul className="review-post-button"
+          >
+            <OpenModalMenuItem
+              itemText="Post Your Review"
+              modalComponent={<ReviewFormModal />}
+            />
+          </ul>
+
+        )}
+        {reviewsArr.length === 0 && (
+          <div className="no-reviews">
+            Be the first to post a review!
+          </div>
         )}
         {reviewsArr.map((review) =>
         (<div className="user-review">
@@ -145,7 +181,7 @@ const SpotPageIndex = () => {
         </div>))
         }
       </div>
-    </div>
+    </div >
   )
 }
 
