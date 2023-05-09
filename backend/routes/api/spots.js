@@ -515,7 +515,7 @@ router.get('/:spotId/reviews', requireAuth, async (req, res, next) => {
       }
     ]
   })
-  res.status(200).json(reviews)
+  res.status(200).json({Reviews: reviews})
 })
 
 //validate review 
