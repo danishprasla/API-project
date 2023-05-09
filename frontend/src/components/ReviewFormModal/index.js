@@ -12,16 +12,29 @@ function ReviewFormModal() {
   const [starRating, setStarRating] = useState(0);
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+  const [starHover, setStarHover] = useState(0)
+  const [submitted, setSubmitted] = useState(false)
 
-  const userId = useSelector(state => state.session.user.id)
+  // const userId = useSelector(state => state.session.user.id)
   const spot = useSelector(state => state.spots)
   const spotId = Object.keys(spot)[0]
-  console.log(spotId)
+  // console.log(spotId)
 
 
+  // useEffect(() => {
+  //   // console.log(starHover)
+  // }, [starRating, starHover])
   useEffect(() => {
+    let errors = {}
+    if (starRating === 0) {
+      errors.star = 'Select a star rating before submitting'
+    } if (reviewMessage.length === 0) {
+      errors.reviewMessage = 'You must provide a review before submitting'
+    }
+    setErrors(errors)
+    // console.log(errors)
+  }, [starRating, reviewMessage, submitted])
 
-  }, [starRating])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,7 +44,11 @@ function ReviewFormModal() {
       review: reviewMessage,
       stars: starRating
     }
-    const newReview = dispatch(createSpotReviewThunk(review))
+    if (Object.values(errors) === 0) {
+      const newReview = dispatch(createSpotReviewThunk(review))
+    } else {
+      setSubmitted(true)
+    }
 
   };
 
@@ -41,15 +58,26 @@ function ReviewFormModal() {
       <form onSubmit={handleSubmit}>
         <div className="review-form-wrapper">
           <label>
+            {(errors.reviewMessage && submitted) && (
+              <div className="error-message">
+                {errors.reviewMessage}
+              </div>
+            )}
             <textarea
               type="text"
               value={reviewMessage}
               placeholder="Leave your review here..."
               onChange={(e) => setReviewMessage(e.target.value)}
               required
+
             />
           </label>
-          <div>
+          <div className="star-review-container">
+            {(errors.star && submitted) && (
+              <div className="error-message">
+                {errors.star}
+              </div>
+            )}
             <label>
               <input
                 type="radio"
@@ -57,11 +85,16 @@ function ReviewFormModal() {
                 onChange={() => setStarRating(1)}
                 className="star"
               />
-              {(starRating >= 1) ? (
-                <i className="fa-solid fa-star fa-xl"></i>
+              {(starRating >= 1 || starHover >= 1) ? (
+                <i className="fa-solid fa-star fa-xl"
+                  onMouseEnter={() => setStarHover(1)}
+                  onMouseLeave={() => setStarHover(0)}></i>
 
               ) : (
-                <i className="fa-regular fa-star fa-xl"></i>
+                <i className="fa-regular fa-star
+                 fa-xl"
+                  onMouseEnter={() => setStarHover(1)}
+                  onMouseLeave={() => setStarHover(0)}></i>
               )}
             </label>
             <label>
@@ -70,12 +103,17 @@ function ReviewFormModal() {
                 name="rating"
                 className="star"
                 onChange={() => setStarRating(2)}
+
               />
-              {(starRating >= 2) ? (
-                <i className="fa-solid fa-star fa-xl"></i>
+              {(starRating >= 2 || starHover >= 2) ? (
+                <i className="fa-solid fa-star fa-xl"
+                  onMouseEnter={() => setStarHover(2)}
+                  onMouseLeave={() => setStarHover(0)}></i>
 
               ) : (
-                <i className="fa-regular fa-star fa-xl"></i>
+                <i className="fa-regular fa-star fa-xl"
+                  onMouseEnter={() => setStarHover(2)}
+                  onMouseLeave={() => setStarHover(0)}></i>
               )}
             </label>
             <label>
@@ -83,12 +121,17 @@ function ReviewFormModal() {
                 type="radio"
                 name="rating"
                 className="star"
-                onChange={() => setStarRating(3)} />
-              {(starRating >= 3) ? (
-                <i className="fa-solid fa-star fa-xl"></i>
+                onChange={() => setStarRating(3)}
+              />
+              {(starRating >= 3 || starHover >= 3) ? (
+                <i className="fa-solid fa-star fa-xl"
+                  onMouseEnter={() => setStarHover(3)}
+                  onMouseLeave={() => setStarHover(0)}></i>
 
               ) : (
-                <i className="fa-regular fa-star fa-xl"></i>
+                <i className="fa-regular fa-star fa-xl"
+                  onMouseEnter={() => setStarHover(3)}
+                  onMouseLeave={() => setStarHover(0)}></i>
               )}
             </label>
             <label>
@@ -97,12 +140,17 @@ function ReviewFormModal() {
                 name="rating"
                 className="star"
                 onChange={() => setStarRating(4)}
+
               />
-              {(starRating >= 4) ? (
-                <i className="fa-solid fa-star fa-xl"></i>
+              {(starRating >= 4 || starHover >= 4) ? (
+                <i className="fa-solid fa-star fa-xl"
+                  onMouseEnter={() => setStarHover(4)}
+                  onMouseLeave={() => setStarHover(0)}></i>
 
               ) : (
-                <i className="fa-regular fa-star fa-xl"></i>
+                <i className="fa-regular fa-star fa-xl"
+                  onMouseEnter={() => setStarHover(4)}
+                  onMouseLeave={() => setStarHover(0)}></i>
               )}
             </label>
             <label>
@@ -111,11 +159,15 @@ function ReviewFormModal() {
                 className="star"
                 onChange={() => setStarRating(5)}
               />
-              {(starRating >= 5) ? (
-                <i className="fa-solid fa-star fa-xl"></i>
+              {(starRating >= 5 || starHover >= 5) ? (
+                <i className="fa-solid fa-star fa-xl"
+                  onMouseEnter={() => setStarHover(5)}
+                  onMouseLeave={() => setStarHover(0)}></i>
 
               ) : (
-                <i className="fa-regular fa-star fa-xl"></i>
+                <i className="fa-regular fa-star fa-xl"
+                  onMouseEnter={() => setStarHover(5)}
+                  onMouseLeave={() => setStarHover(0)}></i>
               )}
 
             </label>
@@ -123,7 +175,10 @@ function ReviewFormModal() {
 
           </div>
 
-          <button type="submit">Submit Your Review</button>
+          <button
+            type="submit"
+            disabled={Object.values(errors).length > 0 ? true : false}
+          >Submit Your Review</button>
         </div>
       </form>
     </>

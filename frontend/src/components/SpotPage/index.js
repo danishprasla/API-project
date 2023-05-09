@@ -50,7 +50,7 @@ const SpotPageIndex = () => {
   console.log('reviews ->', reviewsObj)
   const reviewsArr = Object.values(reviewsObj)
 
-  const reviewCheck = reviewsArr.find(review => review.User.id === userId)
+  const reviewCheck = reviewsArr.find(review => review.User?.id === userId)
 
   const spotImages = spot.SpotImages || []
   const previewImage = spotImages.find(spot => spot.preview === true);
@@ -169,10 +169,10 @@ const SpotPageIndex = () => {
         (<div key={review.id} className="user-review">
 
           <h4 className="review-firstname">
-            {review.User.firstName}
+            {review.User?.firstName}
           </h4>
           <div className="review-date">
-            {convertDate(review.createdAt)}
+            {convertDate(review?.createdAt)}
           </div>
           <div className="review-content">
             {review.review}
