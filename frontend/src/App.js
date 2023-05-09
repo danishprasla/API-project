@@ -6,6 +6,8 @@ import Navigation from "./components/Navigation";
 import LandingPageIndex from "./components/LandingPage";
 import SpotPageIndex from "./components/SpotPage"
 import CreateSpotFormIndex from "./components/CreateSpotForm";
+import CurrentSpotsIndex from "./components/CurrentSpots";
+import EditReportIndex from "./components/EditSpot";
 
 function App() {
   const dispatch = useDispatch();
@@ -19,9 +21,11 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded &&
         <Switch>
-          <Route exact path="/" component={LandingPageIndex}/>
-          <Route path ="/spots/new" component={CreateSpotFormIndex}/>
-          <Route path ="/spots/:spotId" component={SpotPageIndex}/>
+          <Route exact path="/" component={LandingPageIndex} />
+          <Route path="/spots/new" component={CreateSpotFormIndex} />
+          <Route path="/spots/current" component={CurrentSpotsIndex} />
+          <Route path="spots/:spotId/edit" component={EditReportIndex} />
+          <Route path="/spots/:spotId" component={SpotPageIndex} />
         </Switch>
       }
     </>

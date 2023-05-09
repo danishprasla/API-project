@@ -1,9 +1,9 @@
-
 .profileButton {
   border-radius: 10px;
   margin-bottom: 10px;
   cursor: pointer;
 }
+
 .logo {
   transform: rotate(180deg);
   max-width: 40px;
@@ -12,22 +12,34 @@
 ul {
   list-style: none;
 }
+
 .nav {
   border-bottom: solid 2px gray;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .profile-dropdown {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   cursor: pointer;
 }
+
 .create-new-spot {
   text-decoration: none;
   color: green;
   margin: 10px;
+}
+
+.manage-spots {
+  text-decoration: none;
+  color: inherit;
+}
+
+.drop-down-user-info>li {
+  cursor: default;
 }
 
 

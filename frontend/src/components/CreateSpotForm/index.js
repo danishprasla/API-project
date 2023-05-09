@@ -6,9 +6,15 @@ import './CreateSpotForm.css'
 import { createSpotImageThunk } from "../../store/spotimage"
 
 
-const CreateSpotFormIndex = ({ spot }) => {
+const CreateSpotFormIndex = (props) => {
   const history = useHistory()
   const dispatch = useDispatch()
+  // console.log('props ->>',props)
+  const spot = props.location.spot
+  const formType = props.location.formType
+
+  // console.log('prop spot --->', spot)
+  // console.log('prop form type --->', formType)
 
   //get the userid to add to the form submission neeeded?
   const userId = useSelector(state => state.session)
@@ -21,14 +27,14 @@ const CreateSpotFormIndex = ({ spot }) => {
   }
 
   //form states
-  const [address, setAddress] = useState('')
-  const [city, setCity] = useState('')
-  const [state, setState] = useState('')
-  const [country, setCountry] = useState('')
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [price, setPrice] = useState(0)
-  const [previewImage, setPreviewImage] = useState('')
+  const [address, setAddress] = useState(spot?.address || '')
+  const [city, setCity] = useState(spot?.city || '')
+  const [state, setState] = useState(spot?.state || '')
+  const [country, setCountry] = useState(spot?.country || '')
+  const [name, setName] = useState(spot?.name || '')
+  const [description, setDescription] = useState(spot?.description || '')
+  const [price, setPrice] = useState(spot?.price || 0)
+  const [previewImage, setPreviewImage] = useState(spot?.previewImage || '')
   const [image1, setImage1] = useState('')
   const [image2, setImage2] = useState('')
   const [image3, setImage3] = useState('')
@@ -289,7 +295,7 @@ const CreateSpotFormIndex = ({ spot }) => {
               value={image4}
               type="text"
               placeholder="Image URL"
-              onChange={(e) => setImage1(e.target.value)}
+              onChange={(e) => setImage4(e.target.value)}
             />
             {validationErrors.image4 && submittedPress && (
               <div className="errors"> {validationErrors.image4}</div>

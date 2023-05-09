@@ -18,7 +18,7 @@ const LandingPageIndex = () => {
 
   }, [dispatch])
 
-  console.log('spots ---->', spots)
+  // console.log('spots ---->', spots)
  
   return (
     <div className="spots">

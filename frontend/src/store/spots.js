@@ -4,6 +4,7 @@ import { csrfFetch } from "./csrf";
 const LOAD_ALL_SPOTS = 'spots/loadAllSpots'
 const LOAD_ONE_SPOT = 'spots/loadOneSpot'
 const CREATE_SPOT = 'spots/createSpot'
+const LOAD_USER_SPOTS = 'spots/userSpots'
 
 //creators
 const loadAllSpots = (spots) => {
@@ -24,6 +25,13 @@ const createSpot = (spot) => {
   return {
     type: CREATE_SPOT,
     spot
+  }
+}
+
+const loadCurrentUserSpots = (spots) => {
+  return {
+    type: LOAD_USER_SPOTS,
+    spots
   }
 }
 
@@ -48,7 +56,7 @@ export const loadOneSpotThunk = (spotId) => async (dispatch) => {
 
 //create spot thunk
 export const createSpotThunk = (spot) => async (dispatch) => {
-  console.log('this is the spot from spot thunk -->', spot)
+  // console.log('this is the spot from spot thunk -->', spot)
   const res = await csrfFetch('/api/spots', {
     method: 'POST',
     headers: {
@@ -56,7 +64,7 @@ export const createSpotThunk = (spot) => async (dispatch) => {
     },
     body: JSON.stringify(spot)
   })
-  console.log('this is the res from spot thunk -->', res)
+  // console.log('this is the res from spot thunk -->', res)
   if (res.ok) {
     const spot = await res.json()
     dispatch(createSpot(spot))
@@ -66,12 +74,29 @@ export const createSpotThunk = (spot) => async (dispatch) => {
     return errors
   }
 }
+//get current user spots
+export const loadCurrentUserSpotsThunk = () => async (dispatch) => {
+  const res = await csrfFetch('/api/spots/current')
+  if (res.ok) {
+    const spots = await res.json()
+    dispatch(loadCurrentUserSpots(spots))
+    //return value is {'Spots':[{},{}...]}
+  }
+}
 
 const initialState = {}
 const spotsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_ALL_SPOTS: {
       const newState = { ...state }
+      const spotsArr = action.spots.Spots
+      spotsArr.forEach((spot) => {
+        newState[spot.id] = spot
+      })
+      return newState
+    }
+    case LOAD_USER_SPOTS: {
+      const newState = {}
       const spotsArr = action.spots.Spots
       spotsArr.forEach((spot) => {
         newState[spot.id] = spot
