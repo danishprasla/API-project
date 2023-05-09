@@ -4,6 +4,13 @@ import { loadOneSpotThunk } from "../../store/spots"
 import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min"
 import { loadSpotReviewsThunk } from "../../store/reviews"
 
+const convertDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(date);
+  const res = `${month} ${year}`
+  return res
+}
 
 const SpotPageIndex = () => {
   const dispatch = useDispatch()
@@ -39,6 +46,8 @@ const SpotPageIndex = () => {
   console.log('reviews ->', reviewsObj)
   const reviewsArr = Object.values(reviewsObj)
 
+  const reviewCheck = reviewsArr.find(review => review.User.id === userId)
+
   const spotImages = spot.SpotImages || []
   const previewImage = spotImages.find(spot => spot.preview === true);
   // console.log('preview image url --->', previewImage)
@@ -52,12 +61,12 @@ const SpotPageIndex = () => {
 
   return (
     <div className="spot">
-      <h3 className="spot-name">
+      <h2 className="spot-name">
         {spot.name}
-      </h3>
-      <div className="spot-location">
+      </h2>
+      <h4 className="spot-location">
         {spot.city}, {spot.state}, {spot.country}
-      </div>
+      </h4>
       <div className="spot-images">
         {previewImage && (
           <div className="spot-preview">
@@ -76,44 +85,63 @@ const SpotPageIndex = () => {
       {spot.Owner &&
         <div className="details">
           <div className="spot-details">
-            <h3>
+            <h2>
               Hosted by {spot.Owner.firstName} {spot.Owner.lastName}
-            </h3>
+            </h2>
             <div className="description">
               {spot.description}
             </div>
           </div>
-          <div className="booking">
-            <div className="booking-details">
-              <div className="price-detail">
-                <span className="price">${spot.price}</span>
-                <span className="night"> night</span>
-              </div>
-              <div className="review-details">
-                <i className="fas fa-star"></i>
-                {spot.avgStarRating} &#183; {spot.numReviews} reviews
-                {userId !== ownerId && (
+          {userId !== ownerId && (
+            <div className="booking">
+              <div className="booking-details">
+                <div className="price-detail">
+                  <span className="price">${spot.price}</span>
+                  <span className="night"> night</span>
+                </div>
+
+                <div className="review-details">
+                  <h3>
+                    ${spot.price} night
+                  </h3>
+                  <i className="fas fa-star"></i>
+                  {spot.avgStarRating} &#183; {spot.numReviews} {spot.numReviews === 1 ? "review" : "reviews"}
+
                   <button
                     className="reserve-button"
                     onClick={() => alert('Feature Coming Soon...')}
                   > Reserve </button>
-                )}
+
+                </div>
+
               </div>
             </div>
-          </div>
+
+          )}
         </div>
       }
       <div className="review-section" >
+
         <h3>
           <i className="fas fa-star"></i>
-          {spot.avgStarRating} &#183; {spot.numReviews} reviews
+          {spot.avgStarRating} &#183; {spot.numReviews} {spot.numReviews === 1 ? "review" : "reviews"}
         </h3>
-        {userId !== ownerId && (
+        {(userId !== ownerId && !reviewCheck) && (
           <button className="review-button"> Post Your Review</button>
         )}
-        {reviewsArr.map((review) => 
-        (<div>
-          test... do stuff for reviews here
+        {reviewsArr.map((review) =>
+        (<div className="user-review">
+          {console.log('review --->'
+            , review)}
+          <h4 className="review-firstname">
+            {review.User.firstName}
+          </h4>
+          <div className="review-date">
+            {convertDate(review.createdAt)}
+          </div>
+          <div className="review-content">
+            {review.review}
+          </div>
         </div>))
         }
       </div>
