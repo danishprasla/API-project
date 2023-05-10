@@ -96,25 +96,26 @@ const SpotPageIndex = () => {
               {spot.description}
             </div>
           </div>
-          {userId !== ownerId && (
-            <div className="booking">
-              <div className="booking-details">
-                <div className="price-detail">
-                  <span className="price">${spot.price}</span>
-                  <span className="night"> night</span>
+          <div className="booking">
+            <div className="booking-details">
+              <div className="price-detail">
+                <h3 className="booking-price">
+                  ${spot.price}
+                </h3>
+                <span className="booking-night-text">
+                  night
+                </span>
+              </div>
+
+              <div className="review-details-booking">
+                <div className="booking-review-section">
+
+                  <i className="fas fa-star"></i>
+                  {spot.numReviews === 0 ? (
+                    spot.avgStarRating
+                  ) : `${spot.avgStarRating} \u00b7 ${spot.numReviews} ${spot.numReviews === 1 ? "review" : "reviews"}`}
                 </div>
-
-                <div className="review-details">
-                  <h3>
-                    ${spot.price} night
-                  </h3>
-                  <div className="booking-review-section">
-
-                    <i className="fas fa-star"></i>
-                    {spot.numReviews === 0 ? (
-                      spot.avgStarRating
-                    ) : `${spot.avgStarRating} \u00b7 ${spot.numReviews} ${spot.numReviews === 1 ? "review" : "reviews"}`}
-                  </div>
+                {userId !== ownerId && (
                   <div className="booking-button">
 
                     <button
@@ -122,11 +123,11 @@ const SpotPageIndex = () => {
                       onClick={() => alert('Feature Coming Soon...')}
                     > Reserve </button>
                   </div>
-                </div>
-
+                )}
               </div>
+
             </div>
-          )}
+          </div>
         </div>
       }
       <div className="review-section" >
@@ -160,7 +161,7 @@ const SpotPageIndex = () => {
           </ul>
 
         )}
-        {reviewsArr.length === 0 && (
+        {(reviewsArr.length === 0 && userId !== ownerId) && (
           <div className="no-reviews">
             Be the first to post a review!
           </div>

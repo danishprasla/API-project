@@ -105,7 +105,32 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
     }
 
   }, [spot])
-  // if(!spot.SpotImages) return
+  
+  // if (!spot.SpotImages) {
+  //   return (
+  //     <div>
+  //       ...Loading...
+  //     </div>
+  //   )
+  // } else {
+  //   const editSpotImages = []
+  //   //preview image if prop was passed
+  //   let editSpotPreviewImage = ''
+  //   const spotImages = spot.SpotImages
+
+  //   for (let image of spotImages) {
+  //     if (image.preview === false) {
+  //       editSpotImages.push(image.url)
+  //     } else {
+  //       editSpotPreviewImage = image.url
+  //     }
+  //   }
+  //   setPreviewImage(editSpotPreviewImage)
+  //   setImage1(editSpotImages[0])
+  //   setImage2(editSpotImages[1])
+  //   setImage3(editSpotImages[2])
+  //   setImage4(editSpotImages[3])
+  // }
 
   const onSubmit = async (e) => {
     e.preventDefault()
