@@ -11,15 +11,18 @@ function Navigation({ isLoaded }) {
   return (
     <ul className="nav">
       <li className="home">
-        <NavLink exact to="/">
-          <img className = "logo" src={airbnbLogo} alt="logo"/>
-          AirLnL
+        <NavLink className='home-icon' exact to="/">
+          <img className="logo" src={airbnbLogo} alt="logo" />
+          <div className='logo-name'>
+            airLnL
+
+          </div>
         </NavLink>
       </li>
       {isLoaded && (
-        <li>
+        <li className='profile-option-container'>
           {sessionUser && (
-            <NavLink className="create-new-spot" to ='/spots/new'>
+            <NavLink className="create-new-spot" to='/spots/new'>
               Create a New Spot
             </NavLink>
           )}

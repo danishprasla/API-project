@@ -1,7 +1,14 @@
-.profileButton {
-  border-radius: 10px;
-  margin-bottom: 10px;
+.profile-button {
+  border-radius: 50px;
+  height: 30px;
+  width: 60px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  justify-content: center;
+  font-size: 18px;
+  background-color: white;
 }
 
 .logo {
@@ -14,22 +21,18 @@ ul {
 }
 
 .nav {
-  border-bottom: solid 2px gray;
+  border-bottom: solid 2px #CCCCCC;
+  margin: 0px -15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px 20px;
 }
 
-.profile-dropdown {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  cursor: pointer;
-}
 
 .create-new-spot {
   text-decoration: none;
-  color: green;
+  color: #00525E;
   margin: 10px;
 }
 
@@ -42,8 +45,34 @@ ul {
   cursor: default;
 }
 
+.profile-option-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+}
 
+.profile-dropdown {
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0px 0px;
+  padding: 2px 2px;
+  border: 2px solid black;
+  text-align: center;
+  
+}
 
 .hidden {
   display: none;
 }
+
+.home-icon {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 900;
+  color: #ea5b62
+}
+
