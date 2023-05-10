@@ -44,7 +44,9 @@ function ReviewFormModal() {
       review: reviewMessage,
       stars: starRating
     }
-    if (Object.values(errors) === 0) {
+
+    if (Object.values(errors).length === 0) {
+      
       const newReview = dispatch
       (createSpotReviewThunk(review))
       if (newReview.errors) {

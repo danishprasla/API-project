@@ -125,7 +125,6 @@ const SpotPageIndex = () => {
                   </div>
                 )}
               </div>
-
             </div>
           </div>
         </div>
