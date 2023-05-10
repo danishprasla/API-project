@@ -6,13 +6,13 @@ function OpenModalMenuItem({
   itemText, // text of the menu item that opens the modal
   onItemClick, // optional: callback function that will be called once the menu item that opens the modal is clicked
   onModalClose, // optional: callback function that will be called once the modal is closed
-  spotId //spot id passed in from delete spot?
+
 }) {
   const { setModalContent, setOnModalClose } = useModal();
 
   const onClick = () => {
     if (onModalClose) setOnModalClose(onModalClose);
-    setModalContent(modalComponent, {spotId});
+    setModalContent(modalComponent);
     if (onItemClick) onItemClick();
   };
 

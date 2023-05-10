@@ -68,7 +68,6 @@ const CurrentSpotsIndex = () => {
               <OpenModalMenuItem
                 itemText="Delete"
                 modalComponent={<DeleteSpotModal spotId={spot.id} />}
-              // spotId={spot.id}
               />
             </button>
           </div>

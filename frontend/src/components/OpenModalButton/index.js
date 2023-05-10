@@ -6,7 +6,7 @@ function OpenModalButton({
   buttonText, // text of the button that opens the modal
   onButtonClick, // optional: callback function that will be called once the button that opens the modal is clicked
   onModalClose, // optional: callback function that will be called once the modal is closed
-  spotId //spot id will be passed to model content?
+  
 }) {
   const { setModalContent, setOnModalClose, setSpotId } = useModal();
 
@@ -14,9 +14,7 @@ function OpenModalButton({
     if (typeof onButtonClick === "function") onButtonClick();
     if (typeof onModalClose === "function") setOnModalClose(onModalClose);
     setModalContent(modalComponent);
-    if (spotId) {
-      setSpotId(spotId)
-    }
+   
   };
 
   return <button onClick={onClick}>{buttonText}</button>;

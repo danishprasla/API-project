@@ -1,15 +1,19 @@
+import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
+import { deleteUserSpotThunk } from "../../store/spots";
 
 const DeleteSpotModal = ({ spotId }) => {
 
   console.log(spotId)
-
+  const dispatch = useDispatch()
   const { closeModal } = useModal();
 
 
 
-  const onClick = () => {
-
+  const handleDeleteClick = (e) => {
+    e.preventDefault()
+    closeModal()
+    dispatch(deleteUserSpotThunk(spotId))
   }
 
   return (
@@ -20,10 +24,10 @@ const DeleteSpotModal = ({ spotId }) => {
       <h4>
         Are you sure you want to remove this spot from the listings?
       </h4>
-      <button onClick={() => onClick()}>
+      <button onClick={(e) => handleDeleteClick(e)}>
         Yes (Delete Spot)
       </button>
-      <button onClick={() => closeModal()}>
+      <button onClick={(e) => closeModal()}>
         No (Keep Spot)
       </button>
 

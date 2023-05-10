@@ -6,6 +6,7 @@ const LOAD_ONE_SPOT = 'spots/loadOneSpot'
 const CREATE_SPOT = 'spots/createSpot'
 const LOAD_USER_SPOTS = 'spots/userSpots'
 const UPDATE_SPOT = 'spots/updateSpot'
+const DELETE_SPOT = 'spots/deleteSpot'
 
 //creators
 const loadAllSpots = (spots) => {
@@ -36,12 +37,17 @@ const loadCurrentUserSpots = (spots) => {
   }
 }
 
-const updateSpot = (spot) => {
-  return {
-    type: UPDATE_SPOT,
-    spot
-  }
-}
+const deleteUserSpot = (spotId) => ({
+  type: DELETE_SPOT,
+  spotId
+})
+
+// const updateSpot = (spot) => {
+//   return {
+//     type: UPDATE_SPOT,
+//     spot
+//   }
+// } i can just use the createSpot since I will overwrite
 
 //thunks
 //get all spots thunk
@@ -111,6 +117,19 @@ export const updateSpotThunk = ({ spotId, address, city, state, country, lat, ln
     return errors
   }
 }
+export const deleteUserSpotThunk = (spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spotId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  if (res.ok) {
+    dispatch(deleteUserSpot(spotId))
+  } else {
+    return false
+  }
+}
 
 const initialState = {}
 const spotsReducer = (state = initialState, action) => {
@@ -144,6 +163,11 @@ const spotsReducer = (state = initialState, action) => {
     case UPDATE_SPOT: {
       const newState = { ...state }
       newState[action.spot.id] = action.spot
+      return newState
+    }
+    case DELETE_SPOT: {
+      const newState = { ...state }
+      delete newState[action.spotId]
       return newState
     }
     default:
