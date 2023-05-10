@@ -21,7 +21,11 @@ const SpotPageIndex = () => {
   const { spotId } = useParams()
   // const history = useHistory()
 
-  const userId = useSelector(state => state.session.user.id)
+  const user = useSelector(state => state.session.user)
+  let userId = ''
+  if (user) {
+    userId = user.id
+  }
   const reviewsObj = useSelector(state => state.reviews)
   // const reviewsObj = Object.values(reviews.Reviews)
   // // console.log('user id--->', userId)
@@ -29,6 +33,7 @@ const SpotPageIndex = () => {
 
   useEffect(() => {
     dispatch(loadOneSpotThunk(spotId))
+    console.log('spot id in useEffect ->',spotId)
     dispatch(loadSpotReviewsThunk(spotId))
 
   }, [dispatch])
@@ -45,8 +50,7 @@ const SpotPageIndex = () => {
     )
   }
   const ownerId = spot.ownerId
-  // console.log(ownerId)
-  // console.log('userId->', userId)
+
   console.log('reviews ->', reviewsObj)
   const reviewsArr = Object.values(reviewsObj)
 
@@ -115,9 +119,8 @@ const SpotPageIndex = () => {
                     spot.avgStarRating
                   ) : `${spot.avgStarRating} \u00b7 ${spot.numReviews} ${spot.numReviews === 1 ? "review" : "reviews"}`}
                 </div>
-                {userId !== ownerId && (
+                {(userId !== ownerId && user) && (
                   <div className="booking-button">
-
                     <button
                       className="reserve-button"
                       onClick={() => alert('Feature Coming Soon...')}
@@ -140,7 +143,7 @@ const SpotPageIndex = () => {
           {/* <i className="fas fa-star"></i>
           {spot.avgStarRating} &#183; {spot.numReviews} {spot.numReviews === 1 ? "review" : "reviews"} */}
         </h3>
-        {(userId !== ownerId && !reviewCheck && userId) && (
+        {(userId !== ownerId && !reviewCheck && user) && (
           // <button
           //   className="review-button"
           //   onClick={()=> <OpenModalMenuItem
@@ -151,16 +154,16 @@ const SpotPageIndex = () => {
           // </button>
 
 
-          <ul className="review-post-button"
-          >
+
+          <button className='delete-button'>
             <OpenModalMenuItem
               itemText="Post Your Review"
               modalComponent={<ReviewFormModal />}
             />
-          </ul>
+          </button>
 
         )}
-        {(reviewsArr.length === 0 && userId !== ownerId) && (
+        {(reviewsArr.length === 0 && userId !== ownerId && user) && (
           <div className="no-reviews">
             Be the first to post a review!
           </div>

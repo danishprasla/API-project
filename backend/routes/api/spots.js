@@ -487,7 +487,7 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
 })
 
 //get reviews based on spotId
-router.get('/:spotId/reviews', requireAuth, async (req, res, next) => {
+router.get('/:spotId/reviews', async (req, res, next) => {
   const spotId = req.params.spotId
   const spot = await Spot.findByPk(spotId)
 
