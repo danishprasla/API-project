@@ -50,7 +50,7 @@ const SpotPageIndex = () => {
   console.log('reviews ->', reviewsObj)
   const reviewsArr = Object.values(reviewsObj)
 
-  const reviewCheck = reviewsArr.find(review => review.User?.id === userId)
+  const reviewCheck = reviewsArr.find(review => review.userId === userId)
 
   const spotImages = spot.SpotImages || []
   const previewImage = spotImages.find(spot => spot.preview === true);
