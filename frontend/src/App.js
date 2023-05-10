@@ -24,7 +24,7 @@ function App() {
           <Route exact path="/" component={LandingPageIndex} />
           <Route path="/spots/new" component={CreateSpotFormIndex} />
           <Route path="/spots/current" component={CurrentSpotsIndex} />
-          <Route path="spots/:spotId/edit" component={EditReportIndex} />
+          <Route exact path="/spots/:spotId/edit" component={EditReportIndex} />
           <Route path="/spots/:spotId" component={SpotPageIndex} />
         </Switch>
       }

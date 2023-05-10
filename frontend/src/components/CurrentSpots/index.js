@@ -57,8 +57,7 @@ const CurrentSpotsIndex = () => {
           <div className='spot-controls'>
             <button className='update-button'
               onClick={() => {
-                history.push({ pathname: '/spots/new', spot: spot, formType: editForm })
-
+                history.push(`/spots/${spot.id}/edit`)
               }}>
               Update
             </button>
@@ -77,3 +76,4 @@ const CurrentSpotsIndex = () => {
 export default CurrentSpotsIndex
 
 // history.push(`/spots/${spot.id}/edit`)
+// history.push({ pathname: '/spots/new', spot: spot, formType: editForm })

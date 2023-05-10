@@ -6,16 +6,20 @@ import './CreateSpotForm.css'
 import { createSpotImageThunk } from "../../store/spotimage"
 
 
-const CreateSpotFormIndex = (props) => {
+const CreateSpotFormIndex = ({spot, formType}) => {
   const history = useHistory()
   const dispatch = useDispatch()
   // console.log('props ->>',props)
-  const spot = props.location.spot
-  const formType = props.location.formType
+  //set the props
+  // const spot = props.spot
+  // const formType = props.formType
 
   // console.log('prop spot --->', spot)
   // console.log('prop form type --->', formType)
+  //array if a prop was passed (through edit form)
 
+  // console.log('prop spot images ->', editSpotImages)
+  // console.log('prop preview images ->', editSpotPreviewImage)
   //get the userid to add to the form submission neeeded?
   const userId = useSelector(state => state.session)
 
@@ -26,7 +30,7 @@ const CreateSpotFormIndex = (props) => {
     history.push('/')
   }
 
-  //form states
+  //form set state to the prop values if applicable
   const [address, setAddress] = useState(spot?.address || '')
   const [city, setCity] = useState(spot?.city || '')
   const [state, setState] = useState(spot?.state || '')
@@ -34,7 +38,7 @@ const CreateSpotFormIndex = (props) => {
   const [name, setName] = useState(spot?.name || '')
   const [description, setDescription] = useState(spot?.description || '')
   const [price, setPrice] = useState(spot?.price || 0)
-  const [previewImage, setPreviewImage] = useState(spot?.previewImage || '')
+  const [previewImage, setPreviewImage] = useState('')
   const [image1, setImage1] = useState('')
   const [image2, setImage2] = useState('')
   const [image3, setImage3] = useState('')
@@ -79,6 +83,31 @@ const CreateSpotFormIndex = (props) => {
 
   }, [validationErrors])
 
+  useEffect(() => {
+    console.log('spot prop ->', spot)
+    if (spot) {
+      const editSpotImages = []
+      //preview image if prop was passed
+      let editSpotPreviewImage = ''
+      const spotImages = spot.SpotImages || []
+
+      for (let image of spotImages) {
+        if (image.preview === false) {
+          editSpotImages.push(image.url)
+        } else {
+          editSpotPreviewImage = image.url
+        }
+      }
+      setPreviewImage(editSpotPreviewImage)
+      setImage1(editSpotImages[0])
+      setImage2(editSpotImages[1])
+      setImage3(editSpotImages[2])
+      setImage4(editSpotImages[3])
+    }
+
+  }, [spot])
+
+
   const onSubmit = async (e) => {
     e.preventDefault()
     setSubmittedPress(true)
@@ -90,51 +119,56 @@ const CreateSpotFormIndex = (props) => {
     const image3Post = { url: image3, preview: false }
     const image4Post = { url: image4, preview: false }
 
+
     if (!Object.values(validationErrors).length) {
-      const res = await dispatch(createSpotThunk(newSpot))
-      if (res.id) {
-        //put postImage thunks here
-        const spotId = res.id
+      if (formType === 'edit') {
 
-        previewImagePost.spotId = spotId
-        const previewImageRes = await dispatch(createSpotImageThunk(previewImagePost))
-
-        if (previewImageRes.errors) {
-          setValidationErrors({ ...previewImageRes.errors })
-        }
-
-        if (image1.length > 2) {
-          image1Post.spotId = spotId
-          const image1Res = await dispatch(createSpotImageThunk(image1Post))
-          if (image1Res.errors) {
-            setValidationErrors({ ...previewImageRes.errors })
-          }
-        }
-        if (image2.length > 2) {
-          image2Post.spotId = spotId
-          const image2Res = await dispatch(createSpotImageThunk(image2Post))
-          if (image2Res.errors) {
-            setValidationErrors({ ...previewImageRes.errors })
-          }
-        }
-        if (image3.length > 2) {
-          image3Post.spotId = spotId
-          const image3Res = await dispatch(createSpotImageThunk(image3Post))
-          if (image3Res.errors) {
-            setValidationErrors({ ...previewImageRes.errors })
-          }
-        }
-        if (image4.length > 2) {
-          image4Post.spotId = spotId
-          const image4Res = await dispatch(createSpotImageThunk(image1Post))
-          if (image4Res.errors) {
-            setValidationErrors({ ...previewImageRes.errors })
-          }
-        }
-
-        history.push(`/spots/${spotId}`)
       } else {
-        setValidationErrors({ ...res.errors })
+        const res = await dispatch(createSpotThunk(newSpot))
+        if (res.id) {
+          //put postImage thunks here
+          const spotId = res.id
+
+          previewImagePost.spotId = spotId
+          const previewImageRes = await dispatch(createSpotImageThunk(previewImagePost))
+
+          if (previewImageRes.errors) {
+            setValidationErrors({ ...previewImageRes.errors })
+          }
+
+          if (image1.length > 2) {
+            image1Post.spotId = spotId
+            const image1Res = await dispatch(createSpotImageThunk(image1Post))
+            if (image1Res.errors) {
+              setValidationErrors({ ...previewImageRes.errors })
+            }
+          }
+          if (image2.length > 2) {
+            image2Post.spotId = spotId
+            const image2Res = await dispatch(createSpotImageThunk(image2Post))
+            if (image2Res.errors) {
+              setValidationErrors({ ...previewImageRes.errors })
+            }
+          }
+          if (image3.length > 2) {
+            image3Post.spotId = spotId
+            const image3Res = await dispatch(createSpotImageThunk(image3Post))
+            if (image3Res.errors) {
+              setValidationErrors({ ...previewImageRes.errors })
+            }
+          }
+          if (image4.length > 2) {
+            image4Post.spotId = spotId
+            const image4Res = await dispatch(createSpotImageThunk(image1Post))
+            if (image4Res.errors) {
+              setValidationErrors({ ...previewImageRes.errors })
+            }
+          }
+
+          history.push(`/spots/${spotId}`)
+        } else {
+          setValidationErrors({ ...res.errors })
+        }
       }
     }
   }
@@ -245,7 +279,7 @@ const CreateSpotFormIndex = (props) => {
         </div>
         <div className="photos-field">
           <h3> Liven up your spot with photos</h3>
-          <h5> Submit a link to at least one photo to publish your spot.Submit a link to at least one photo to publish your spot.</h5>
+          <h5> Submit a link to at least one photo to publish your spot.</h5>
           <label>
             <input
               value={previewImage}
@@ -303,7 +337,7 @@ const CreateSpotFormIndex = (props) => {
           </label>
         </div>
         <button type="submit">
-          Create Spot
+          {formType === 'edit' ? 'Edit Spot' : 'Create Spot'}
         </button>
 
       </form>
