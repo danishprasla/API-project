@@ -7,6 +7,7 @@ import OpenModalMenuItem from "../Navigation/OpenModalMenuItem"
 import LoginFormModal from "../LoginFormModal"
 import './SpotPage.css'
 import ReviewFormModal from "../ReviewFormModal"
+import DeleteReviewModal from "../DeleteReviewModal"
 
 const convertDate = (dateString) => {
   const date = new Date(dateString);
@@ -33,7 +34,7 @@ const SpotPageIndex = () => {
 
   useEffect(() => {
     dispatch(loadOneSpotThunk(spotId))
-    console.log('spot id in useEffect ->',spotId)
+    console.log('spot id in useEffect ->', spotId)
     dispatch(loadSpotReviewsThunk(spotId))
 
   }, [dispatch])
@@ -180,6 +181,15 @@ const SpotPageIndex = () => {
           <div className="review-content">
             {review.review}
           </div>
+          {review.userId === userId && (
+            <button>
+              <OpenModalMenuItem
+                itemText="Delete"
+                modalComponent={<DeleteReviewModal reviewId={review.id} />}
+              />
+
+            </button>
+          )}
         </div>))
         }
       </div>
