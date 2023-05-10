@@ -8,6 +8,7 @@ import SpotPageIndex from "./components/SpotPage"
 import CreateSpotFormIndex from "./components/CreateSpotForm";
 import CurrentSpotsIndex from "./components/CurrentSpots";
 import EditReportIndex from "./components/EditSpot";
+import DeleteSpotModalIndex from "./components/DeleteSpotModal";
 
 function App() {
   const dispatch = useDispatch();

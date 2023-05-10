@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux"
 import { loadAllSpotsThunk, loadCurrentUserSpotsThunk } from "../../store/spots"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import CreateSpotFormIndex from '../CreateSpotForm'
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem'
+import ReviewFormModal from '../ReviewFormModal'
+import DeleteSpotModal from '../DeleteSpotModal'
 
 const CurrentSpotsIndex = () => {
   const spotsObj = useSelector(state => state.spots)
@@ -62,7 +65,10 @@ const CurrentSpotsIndex = () => {
               Update
             </button>
             <button className='delete-button'>
-              Delete
+              <OpenModalMenuItem
+                itemText="Delete"
+                modalComponent={<DeleteSpotModal spotId={spot.id} />}
+              />
             </button>
           </div>
         </div>
