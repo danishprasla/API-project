@@ -27,9 +27,9 @@ function ReviewFormModal() {
   useEffect(() => {
     let errors = {}
     if (starRating === 0) {
-      errors.star = 'Select a star rating before submitting'
+      errors.stars = 'Select a star rating before submitting'
     } if (reviewMessage.length === 0) {
-      errors.reviewMessage = 'You must provide a review before submitting'
+      errors.review = 'You must provide a review before submitting'
     }
     setErrors(errors)
     // console.log(errors)
@@ -45,7 +45,11 @@ function ReviewFormModal() {
       stars: starRating
     }
     if (Object.values(errors) === 0) {
-      const newReview = dispatch(createSpotReviewThunk(review))
+      const newReview = dispatch
+      (createSpotReviewThunk(review))
+      if (newReview.errors) {
+        setErrors(newReview.errors)
+      }
     } else {
       setSubmitted(true)
     }
@@ -58,7 +62,7 @@ function ReviewFormModal() {
       <form onSubmit={handleSubmit}>
         <div className="review-form-wrapper">
           <label>
-            {(errors.reviewMessage && submitted) && (
+            {(errors.review && submitted) && (
               <div className="error-message">
                 {errors.reviewMessage}
               </div>
@@ -69,11 +73,10 @@ function ReviewFormModal() {
               placeholder="Leave your review here..."
               onChange={(e) => setReviewMessage(e.target.value)}
               required
-
             />
           </label>
           <div className="star-review-container">
-            {(errors.star && submitted) && (
+            {(errors.stars && submitted) && (
               <div className="error-message">
                 {errors.star}
               </div>

@@ -4,6 +4,8 @@ import { csrfFetch } from "./csrf";
 const LOAD_ALL_SPOTS = 'spots/loadAllSpots'
 const LOAD_ONE_SPOT = 'spots/loadOneSpot'
 const CREATE_SPOT = 'spots/createSpot'
+const LOAD_USER_SPOTS = 'spots/userSpots'
+const UPDATE_SPOT = 'spots/updateSpot'
 
 //creators
 const loadAllSpots = (spots) => {
@@ -23,6 +25,20 @@ const loadOneSpot = (spot) => {
 const createSpot = (spot) => {
   return {
     type: CREATE_SPOT,
+    spot
+  }
+}
+
+const loadCurrentUserSpots = (spots) => {
+  return {
+    type: LOAD_USER_SPOTS,
+    spots
+  }
+}
+
+const updateSpot = (spot) => {
+  return {
+    type: UPDATE_SPOT,
     spot
   }
 }
@@ -48,7 +64,7 @@ export const loadOneSpotThunk = (spotId) => async (dispatch) => {
 
 //create spot thunk
 export const createSpotThunk = (spot) => async (dispatch) => {
-  console.log('this is the spot from spot thunk -->', spot)
+  // console.log('this is the spot from spot thunk -->', spot)
   const res = await csrfFetch('/api/spots', {
     method: 'POST',
     headers: {
@@ -56,7 +72,36 @@ export const createSpotThunk = (spot) => async (dispatch) => {
     },
     body: JSON.stringify(spot)
   })
-  console.log('this is the res from spot thunk -->', res)
+  // console.log('this is the res from spot thunk -->', res)
+  if (res.ok) {
+    const spot = await res.json()
+    dispatch(createSpot(spot))
+    return spot
+  } else {
+    const errors = await res.json()
+    return errors
+  }
+}
+//get current user spots
+export const loadCurrentUserSpotsThunk = () => async (dispatch) => {
+  const res = await csrfFetch('/api/spots/current')
+  if (res.ok) {
+    const spots = await res.json()
+    dispatch(loadCurrentUserSpots(spots))
+    //return value is {'Spots':[{},{}...]}
+  }
+}
+export const updateSpotThunk = ({ spotId, address, city, state, country, lat, lng, name, description, price }) => async (dispatch) => {
+  // console.log('inside update thunk')
+  const spot = { address, city, state, country, lat, lng, name, description, price }
+  const res = await csrfFetch(`/api/spots/${spotId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(spot)
+  })
+  // console.log('this is the res from spot thunk -->', res)
   if (res.ok) {
     const spot = await res.json()
     dispatch(createSpot(spot))
@@ -78,13 +123,26 @@ const spotsReducer = (state = initialState, action) => {
       })
       return newState
     }
+    case LOAD_USER_SPOTS: {
+      const newState = {}
+      const spotsArr = action.spots.Spots
+      spotsArr.forEach((spot) => {
+        newState[spot.id] = spot
+      })
+      return newState
+    }
     case LOAD_ONE_SPOT: {
       const newState = {}
       newState[action.spot.id] = action.spot
       return newState
     }
     case CREATE_SPOT: {
-      const newState = {...state}
+      const newState = { ...state }
+      newState[action.spot.id] = action.spot
+      return newState
+    }
+    case UPDATE_SPOT: {
+      const newState = { ...state }
       newState[action.spot.id] = action.spot
       return newState
     }
