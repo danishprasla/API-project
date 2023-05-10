@@ -62,17 +62,17 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
       errors.description = 'Description needs a minimum of 30 characters'
     } if (price < 1) {
       errors.price = 'Price is required'
-    } if (previewImage.length < 4) {
+    } if (formType !== 'edit' && previewImage.length < 4) {
       errors.previewImage = 'Preview image is required'
-    } if (!previewImageCheck.some(extension => previewImage.endsWith(extension))) {
+    } if (formType !== 'edit' && !previewImageCheck.some(extension => previewImage.endsWith(extension))) {
       errors.previewImage = 'Image URL must end in .png, .jpg, or .jpeg '
-    } if (image1 && !previewImageCheck.some(extension => image1.endsWith(extension))) {
+    } if (formType !== 'edit' && image1 && !previewImageCheck.some(extension => image1.endsWith(extension))) {
       errors.image1 = 'Image URL must end in .png, .jpg, or .jpeg '
-    } if (image2 && !previewImageCheck.some(extension => image2.endsWith(extension))) {
+    } if (formType !== 'edit' && image2 && !previewImageCheck.some(extension => image2.endsWith(extension))) {
       errors.image2 = 'Image URL must end in .png, .jpg, or .jpeg '
-    } if (image3 && !previewImageCheck.some(extension => image3.endsWith(extension))) {
+    } if (formType !== 'edit' && image3 && !previewImageCheck.some(extension => image3.endsWith(extension))) {
       errors.image3 = 'Image URL must end in .png, .jpg, or .jpeg '
-    } if (image4 && !previewImageCheck.some(extension => image4.endsWith(extension))) {
+    } if (formType !== 'edit' && image4 && !previewImageCheck.some(extension => image4.endsWith(extension))) {
       errors.image4 = 'Image URL must end in .png, .jpg, or .jpeg '
     }
     setValidationErrors(errors)
@@ -105,10 +105,11 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
     }
 
   }, [spot])
-
+  // if(!spot.SpotImages) return
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    console.log('form type inside the onSubmit!!', formType)
     setSubmittedPress(true)
     const newSpot = { address, lat: 1, lng: 1, city, state, country, name, description, price }
 
@@ -118,10 +119,13 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
     const image3Post = { url: image3, preview: false }
     const image4Post = { url: image4, preview: false }
 
+    console.log('validation errors', Object.values(validationErrors))
+
 
     if (!Object.values(validationErrors).length) {
       if (formType === 'edit') {
-        const editedSpot = {...newSpot}
+        console.log('I am inside the edit if block for the form!',)
+        const editedSpot = { ...newSpot }
         editedSpot.spotId = spot.id
         const res = await dispatch(updateSpotThunk(editedSpot))
         if (res.id) {
@@ -130,7 +134,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
           history.push(`/spots/${spotId}`)
         } else {
           console.log('OH NO ERROR!')
-          setValidationErrors({...res.errors})
+          setValidationErrors({ ...res.errors })
         }
 
       } else {
