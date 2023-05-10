@@ -19,33 +19,35 @@ const LandingPageIndex = () => {
   }, [dispatch])
 
   // console.log('spots ---->', spots)
- 
+
   return (
-    <div className="spots">
+    <div className="spots-container">
       {spots.map((spot) => (
         <div
           key={spot.id}
-          className="spotTile"
+          className="spot-tile"
           onClick={() => history.push(`/spots/${spot.id}`)}
           title={spot.name}
         >
           <img
             src={spot.previewImage}
             alt={spot.name}
-            className="spotImage"
+            className="spot-image"
           />
-          <div className="spotDescription">
+          <div className="spot-description">
             <div className="location">
               {spot.city}, {spot.state}
             </div>
             <div className="rating">
-              <i className="fas fa-star"></i> 
+              <i className="fas fa-star"></i>
               {spot.avgRating}
             </div>
 
           </div>
-          <div className="spotPrice">
-            ${spot.price} night
+          <div className="spot-price-container">
+            <span className="spot-price">
+              ${spot.price}
+            </span> night
           </div>
 
         </div>

@@ -50,16 +50,15 @@ function ProfileButton({ user }) {
   //component is always rendering the profile icon and is always rending the ul element which however may not be displayed if the showMenu is false. The ul will display the user info IF user exists otherwise it will display the login and logout options
   return (
     <>
-      <button className="profileButton" onClick={openMenu}>
-        <i className="fa-solid fa-bars"></i>
+      <button className="profile-button" onClick={openMenu}>
+        <i className="fa-solid fa-bars"></i>   
         <i className="fas fa-user-circle" />
       </button>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <div className="profile-drop-down-items">
             <div className="drop-down-user-info">
-              <li>{user.username}</li>
-              <li>{user.firstName} {user.lastName}</li>
+              <li>Hello, {user.username}</li>
               <li>{user.email}</li>
             </div>
             <div className="manage-spots-container">
