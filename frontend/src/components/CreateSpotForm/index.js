@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux"
-import { createSpotThunk } from "../../store/spots"
+import { createSpotThunk, updateSpotThunk } from "../../store/spots"
 import { useHistory } from "react-router-dom"
 import { useEffect, useState } from "react"
 import './CreateSpotForm.css'
 import { createSpotImageThunk } from "../../store/spotimage"
 
 
-const CreateSpotFormIndex = ({spot, formType}) => {
+const CreateSpotFormIndex = ({ spot, formType }) => {
   const history = useHistory()
   const dispatch = useDispatch()
   // console.log('props ->>',props)
@@ -16,7 +16,6 @@ const CreateSpotFormIndex = ({spot, formType}) => {
 
   // console.log('prop spot --->', spot)
   // console.log('prop form type --->', formType)
-  //array if a prop was passed (through edit form)
 
   // console.log('prop spot images ->', editSpotImages)
   // console.log('prop preview images ->', editSpotPreviewImage)
@@ -122,6 +121,17 @@ const CreateSpotFormIndex = ({spot, formType}) => {
 
     if (!Object.values(validationErrors).length) {
       if (formType === 'edit') {
+        const editedSpot = {...newSpot}
+        editedSpot.spotId = spot.id
+        const res = await dispatch(updateSpotThunk(editedSpot))
+        if (res.id) {
+          const spotId = res.id
+          // console.log('did it work?')
+          history.push(`/spots/${spotId}`)
+        } else {
+          console.log('OH NO ERROR!')
+          setValidationErrors({...res.errors})
+        }
 
       } else {
         const res = await dispatch(createSpotThunk(newSpot))
@@ -277,65 +287,68 @@ const CreateSpotFormIndex = ({spot, formType}) => {
             )}
           </label>
         </div>
-        <div className="photos-field">
-          <h3> Liven up your spot with photos</h3>
-          <h5> Submit a link to at least one photo to publish your spot.</h5>
-          <label>
-            <input
-              value={previewImage}
-              type="text"
-              placeholder="Preview Image URL"
-              onChange={(e) => setPreviewImage(e.target.value)}
-            />
-            {validationErrors.previewImage && submittedPress && (
-              <div className="errors"> {validationErrors.previewImage}</div>
-            )}
-          </label>
-          <label>
-            <input
-              value={image1}
-              type="text"
-              placeholder="Image URL"
-              onChange={(e) => setImage1(e.target.value)}
-            />
-            {validationErrors.image1 && submittedPress && (
-              <div className="errors"> {validationErrors.image1}</div>
-            )}
-          </label>
-          <label>
-            <input
-              value={image2}
-              type="text"
-              placeholder="Image URL"
-              onChange={(e) => setImage2(e.target.value)}
-            />
-            {validationErrors.image2 && submittedPress && (
-              <div className="errors"> {validationErrors.image2}</div>
-            )}
-          </label>
-          <label>
-            <input
-              value={image3}
-              type="text"
-              placeholder="Image URL"
-              onChange={(e) => setImage3(e.target.value)}
-            />
-            {validationErrors.image3 && submittedPress && (
-              <div className="errors"> {validationErrors.image3}</div>
-            )}
-          </label>
-          <label>
-            <input
-              value={image4}
-              type="text"
-              placeholder="Image URL"
-              onChange={(e) => setImage4(e.target.value)}
-            />
-            {validationErrors.image4 && submittedPress && (
-              <div className="errors"> {validationErrors.image4}</div>
-            )}
-          </label>
-        </div>
+        {formType !== 'edit' && (
+
+          <div className="photos-field">
+            <h3> Liven up your spot with photos</h3>
+            <h5> Submit a link to at least one photo to publish your spot.</h5>
+            <label>
+              <input
+                value={previewImage}
+                type="text"
+                placeholder="Preview Image URL"
+                onChange={(e) => setPreviewImage(e.target.value)}
+              />
+              {validationErrors.previewImage && submittedPress && (
+                <div className="errors"> {validationErrors.previewImage}</div>
+              )}
+            </label>
+            <label>
+              <input
+                value={image1}
+                type="text"
+                placeholder="Image URL"
+                onChange={(e) => setImage1(e.target.value)}
+              />
+              {validationErrors.image1 && submittedPress && (
+                <div className="errors"> {validationErrors.image1}</div>
+              )}
+            </label>
+            <label>
+              <input
+                value={image2}
+                type="text"
+                placeholder="Image URL"
+                onChange={(e) => setImage2(e.target.value)}
+              />
+              {validationErrors.image2 && submittedPress && (
+                <div className="errors"> {validationErrors.image2}</div>
+              )}
+            </label>
+            <label>
+              <input
+                value={image3}
+                type="text"
+                placeholder="Image URL"
+                onChange={(e) => setImage3(e.target.value)}
+              />
+              {validationErrors.image3 && submittedPress && (
+                <div className="errors"> {validationErrors.image3}</div>
+              )}
+            </label>
+            <label>
+              <input
+                value={image4}
+                type="text"
+                placeholder="Image URL"
+                onChange={(e) => setImage4(e.target.value)}
+              />
+              {validationErrors.image4 && submittedPress && (
+                <div className="errors"> {validationErrors.image4}</div>
+              )}
+            </label>
+          </div>
+        )}
         <button type="submit">
           {formType === 'edit' ? 'Edit Spot' : 'Create Spot'}
         </button>
