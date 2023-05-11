@@ -9,6 +9,18 @@
   justify-content: center;
   font-size: 18px;
   background-color: white;
+  /* position: relative; */
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  width:  190px;
 }
 
 .logo {
@@ -44,6 +56,17 @@ ul {
 .drop-down-user-info>li {
   cursor: default;
 }
+.logout-button {
+  border-radius: 20px;
+  align-self: center;
+  display: block;
+  margin: 0 auto;
+  height: 38px;
+  width: 80px;
+  border: 2px solid black;
+  background-color: #646464;
+  color: white;
+}
 
 .profile-option-container {
   display: flex;
@@ -59,8 +82,12 @@ ul {
   margin: 0px 0px;
   padding: 2px 2px;
   border: 2px solid black;
-  text-align: center;
+  text-align: left;
+  /* position: absolute; */
+  background-color: white;
   
+  word-wrap: break-word;
+
 }
 
 .hidden {
@@ -75,4 +102,3 @@ ul {
   font-weight: 900;
   color: #ea5b62
 }
-
