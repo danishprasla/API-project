@@ -222,7 +222,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
       </div>
       <form
         onSubmit={onSubmit}>
-        <div className="spot-location">
+        <div className="spot-location-form">
 
           <label>
             Country {validationErrors.country && submittedPress && (
