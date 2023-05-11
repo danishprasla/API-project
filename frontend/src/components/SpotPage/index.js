@@ -108,9 +108,9 @@ const SpotPageIndex = () => {
           <div className="booking">
             <div className="booking-details">
               <div className="price-detail">
-                <h3 className="booking-price">
+                <h2 className="booking-price">
                   ${spot.price}
-                </h3>
+                </h2>
                 <span className="booking-night-text">
                   night
                 </span>
@@ -159,7 +159,7 @@ const SpotPageIndex = () => {
 
 
 
-          <button className='delete-button'>
+          <button className='post-review-button'>
             <OpenModalMenuItem
               itemText="Post Your Review"
               modalComponent={<ReviewFormModal />}
@@ -185,7 +185,7 @@ const SpotPageIndex = () => {
             {review.review}
           </div>
           {review.userId === userId && (
-            <button>
+            <button className="delete-button">
               <OpenModalMenuItem
                 itemText="Delete"
                 modalComponent={<DeleteReviewModal reviewId={review.id} />}
