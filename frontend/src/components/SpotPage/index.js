@@ -185,7 +185,7 @@ const SpotPageIndex = () => {
             {review.review}
           </div>
           {review.userId === userId && (
-            <button className="delete-button">
+            <button className="delete-button-spot">
               <OpenModalMenuItem
                 itemText="Delete"
                 modalComponent={<DeleteReviewModal reviewId={review.id} />}
