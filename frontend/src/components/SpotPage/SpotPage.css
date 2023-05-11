@@ -80,6 +80,7 @@
   border: solid black;
   box-shadow: 2px 2px 1px black;
   cursor: pointer;
+  font-size: 14pt;
 }
 
 .price-detail {
@@ -101,7 +102,7 @@ li {
   list-style: none;
 }
 
-.delete-button, .post-review-button {
+.delete-button-spot, .post-review-button {
   background-color: #999999;
   color: white;
   border: 2px solid black;

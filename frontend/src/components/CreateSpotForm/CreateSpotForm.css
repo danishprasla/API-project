@@ -1,3 +1,113 @@
+form {
+  width: 500px;
+
+}
+
 .errors {
-  color: rgb(222, 2, 2)
+  color: rgb(222, 2, 2);
+  font-size: 10pt;
+}
+
+.spot-form {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  margin: auto;
+
+
+}
+
+.spot-location {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 2px solid black;
+}
+
+input,
+label {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input {
+  height: 30px
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  box-sizing: border-box;
+}
+
+textarea,
+input {
+  background-color: #E8F0FE;
+  font-family: 'Open Sans', sans-serif;
+  border: 2px solid black
+}
+
+.city-input {
+  width: 310px;
+}
+
+.city-state {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.description-field {
+  border-bottom: 2px solid black
+}
+
+.city-state-comma {
+  margin-top: 30px;
+  margin-left: -7px;
+}
+
+.price-field {
+  border-bottom: 2px solid black;
+}
+
+textarea {
+  margin-bottom: 20px;
+}
+
+.name-field {
+  border-bottom: 2px solid black;
+}
+
+.name-field-input {
+  margin-bottom: 20px;
+}
+
+.price-field-sub {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.photos-field {
+  border-bottom: 2px solid black;
+}
+
+.photo-input-field {
+  margin-bottom: 20px;
+}
+
+.submit-button-container {
+  margin-top: 15px;
+  width: 100%;
+  text-align: center;
+}
+
+.submit-button {
+  background-color: #ea5b62;
+  color: white;
+  font-size: 12pt;
+  border: 2px solid black;
+  box-shadow: 2px 2px 1px black;
+
 }

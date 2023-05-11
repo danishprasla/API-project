@@ -36,7 +36,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
   const [country, setCountry] = useState(spot?.country || '')
   const [name, setName] = useState(spot?.name || '')
   const [description, setDescription] = useState(spot?.description || '')
-  const [price, setPrice] = useState(spot?.price || 0)
+  const [price, setPrice] = useState(spot?.price || '')
   const [previewImage, setPreviewImage] = useState('')
   const [image1, setImage1] = useState('')
   const [image2, setImage2] = useState('')
@@ -105,7 +105,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
     }
 
   }, [spot])
-  
+
   // if (!spot.SpotImages) {
   //   return (
   //     <div>
@@ -231,6 +231,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
             <input
               value={country}
               type="text"
+              placeholder="Country"
               onChange={(e) => setCountry(e.target.value)}
             />
           </label>
@@ -241,6 +242,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
             <input
               value={address}
               type="text"
+              placeholder="Street Address"
               onChange={(e) => setAddress(e.target.value)}
             />
           </label>
@@ -252,9 +254,15 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
               <input
                 value={city}
                 type="text"
+                placeholder="City"
                 onChange={(e) => setCity(e.target.value)}
+                className="city-input"
               />
+
             </label>
+            <div className="city-state-comma">
+              ,
+            </div>
             <label>
               State {validationErrors.state && submittedPress && (
                 <span className="errors"> {validationErrors.state}</span>
@@ -262,6 +270,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
               <input
                 value={state}
                 type="text"
+                placeholder="State"
                 onChange={(e) => setState(e.target.value)}
               />
             </label>
@@ -276,7 +285,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
             <textarea
               value={description}
               type="text"
-              placeholder="Description"
+              placeholder="Please write at least 30 characters"
               onChange={(e) => setDescription(e.target.value)}
             />
             {validationErrors.description && submittedPress && (
@@ -294,6 +303,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
               type="text"
               placeholder="Name of your spot"
               onChange={(e) => setName(e.target.value)}
+              className="name-field-input"
             />
             {validationErrors.name && submittedPress && (
               <div className="errors"> {validationErrors.name}</div>
@@ -304,29 +314,34 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
           <h3> Set a base price for your spot</h3>
           <h5> Competitive pricing can help your listing stand out and rank higher
             in search results.</h5>
-          <label>$
-            <input
-              value={price}
-              type="number"
-              placeholder="Price per night (USD)"
-              onChange={(e) => setPrice(parseFloat(e.target.value).toFixed(2))}
-            />
-            {validationErrors.price && submittedPress && (
-              <div className="errors"> {validationErrors.price}</div>
-            )}
-          </label>
+          <div className="price-field-sub">
+            $
+            <label>
+              <input
+                value={price}
+                type="number"
+                placeholder="Price per night (USD)"
+                onChange={(e) => setPrice(parseFloat(e.target.value).toFixed(2))}
+              />
+              {validationErrors.price && submittedPress && (
+                <div className="errors"> {validationErrors.price}</div>
+              )}
+            </label>
+          </div>
         </div>
         {formType !== 'edit' && (
 
           <div className="photos-field">
             <h3> Liven up your spot with photos</h3>
             <h5> Submit a link to at least one photo to publish your spot.</h5>
+
             <label>
               <input
                 value={previewImage}
                 type="text"
                 placeholder="Preview Image URL"
                 onChange={(e) => setPreviewImage(e.target.value)}
+                className="photo-input-field"
               />
               {validationErrors.previewImage && submittedPress && (
                 <div className="errors"> {validationErrors.previewImage}</div>
@@ -338,6 +353,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
                 type="text"
                 placeholder="Image URL"
                 onChange={(e) => setImage1(e.target.value)}
+                className="photo-input-field"
               />
               {validationErrors.image1 && submittedPress && (
                 <div className="errors"> {validationErrors.image1}</div>
@@ -349,6 +365,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
                 type="text"
                 placeholder="Image URL"
                 onChange={(e) => setImage2(e.target.value)}
+                className="photo-input-field"
               />
               {validationErrors.image2 && submittedPress && (
                 <div className="errors"> {validationErrors.image2}</div>
@@ -360,6 +377,7 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
                 type="text"
                 placeholder="Image URL"
                 onChange={(e) => setImage3(e.target.value)}
+                className="photo-input-field"
               />
               {validationErrors.image3 && submittedPress && (
                 <div className="errors"> {validationErrors.image3}</div>
@@ -371,16 +389,21 @@ const CreateSpotFormIndex = ({ spot, formType }) => {
                 type="text"
                 placeholder="Image URL"
                 onChange={(e) => setImage4(e.target.value)}
+                className="photo-input-field"
               />
               {validationErrors.image4 && submittedPress && (
                 <div className="errors"> {validationErrors.image4}</div>
               )}
             </label>
+
           </div>
         )}
-        <button type="submit">
-          {formType === 'edit' ? 'Edit Spot' : 'Create Spot'}
-        </button>
+        <div className="submit-button-container">
+
+          <button type="submit" className="submit-button">
+            {formType === 'edit' ? 'Edit Spot' : 'Create Spot'}
+          </button>
+        </div>
 
       </form>
     </div>
