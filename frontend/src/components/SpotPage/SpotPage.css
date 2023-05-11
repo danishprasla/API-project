@@ -1,15 +1,43 @@
-button.reserveButton {
-  border-radius: 0px;
+.spot {
+  margin: 0px 50px
 }
 
 .review-section>ul {
   list-style: none;
-
-  
 }
+
+.spot-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 100%;
+  gap: 5px;
+}
+
+.other-images-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.other-images {
+  width: 100%;
+  height: 100%;
+}
+
+.spot-preview {
+  width: 100%;
+  height: 100%;
+}
+
+.spot-preview-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px 0px 0px 20px;
+}
+
 .review-post-button {
   padding: 1px 5px;
-  margin: 15px 0px ;
+  margin: 15px 0px;
   border: solid black;
   width: fit-content;
   background-color: #999999;
@@ -17,9 +45,75 @@ button.reserveButton {
   box-shadow: 3px 3px 1px black;
   cursor: pointer;
 }
+
+.booking {
+  border: solid black;
+  border-radius: 10px;
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  padding-top: 10px
+}
+
+.booking-price {
+  margin-bottom: 27px;
+}
+
+.booking-details {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.booking-button {
+  width: 100%;
+}
+
+.reserve-button {
+  background-color: #ea5b62;
+  color: white;
+  width: 100%;
+  height: 50px;
+  border: solid black;
+  box-shadow: 2px 2px 1px black;
+  cursor: pointer;
+}
+
+.price-detail {
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.details {
+  border-bottom: solid black;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 40px;
+}
+
 li {
   list-style: none;
 }
 
-
-
+.delete-button, .post-review-button {
+  background-color: #999999;
+  color: white;
+  border: 2px solid black;
+  box-shadow: 2px 2px 1px black;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-size: 14pt;
+  cursor: pointer;
+}
+.review-firstname, .review-date {
+  margin-bottom: 5px;
+}
+.review-date {
+  color: #999999;
+}

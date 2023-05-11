@@ -33,11 +33,15 @@ const SpotPageIndex = () => {
   // console.log(reviewsObj)
 
   useEffect(() => {
-    dispatch(loadOneSpotThunk(spotId))
+    // dispatch(loadOneSpotThunk(spotId))
     // console.log('spot id in useEffect ->', spotId)
     dispatch(loadSpotReviewsThunk(spotId))
 
   }, [dispatch])
+
+  useEffect(() => {
+    dispatch(loadOneSpotThunk(spotId));
+  }, [dispatch, spotId, reviewsObj]);
 
   const spotsObj = useSelector(state => state.spots)
   // console.log('test', spotsObj[spotId])
@@ -79,14 +83,14 @@ const SpotPageIndex = () => {
       <div className="spot-images">
         {previewImage && (
           <div className="spot-preview">
-            <img src={previewImage.url} />
+            <img className="spot-preview-image" src={previewImage.url} />
           </div>
         )}
         {imageUrls.length > 0 &&
 
-          <div className="other-images">
+          <div className="other-images-container">
             {imageUrls.map(url => (
-              <img key={url} src={url} />
+              <img className="other-images" key={url} src={url} />
             ))}
           </div>
         }
@@ -104,32 +108,31 @@ const SpotPageIndex = () => {
           <div className="booking">
             <div className="booking-details">
               <div className="price-detail">
-                <h3 className="booking-price">
+                <h2 className="booking-price">
                   ${spot.price}
-                </h3>
+                </h2>
                 <span className="booking-night-text">
                   night
                 </span>
               </div>
 
-              <div className="review-details-booking">
-                <div className="booking-review-section">
+              <div className="booking-review-section">
 
-                  <i className="fas fa-star"></i>
-                  {spot.numReviews === 0 ? (
-                    spot.avgStarRating
-                  ) : `${spot.avgStarRating} \u00b7 ${spot.numReviews} ${spot.numReviews === 1 ? "review" : "reviews"}`}
-                </div>
-                {(userId !== ownerId && user) && (
-                  <div className="booking-button">
-                    <button
-                      className="reserve-button"
-                      onClick={() => alert('Feature Coming Soon...')}
-                    > Reserve </button>
-                  </div>
-                )}
+                <i className="fas fa-star"></i>
+                {spot.numReviews === 0 ? (
+                  spot.avgStarRating
+                ) : `${spot.avgStarRating} \u00b7 ${spot.numReviews} ${spot.numReviews === 1 ? "review" : "reviews"}`}
               </div>
             </div>
+
+            {(userId !== ownerId && user) && (
+              <div className="booking-button">
+                <button
+                  className="reserve-button"
+                  onClick={() => alert('Feature Coming Soon...')}
+                > Reserve </button>
+              </div>
+            )}
           </div>
         </div>
       }
@@ -156,7 +159,7 @@ const SpotPageIndex = () => {
 
 
 
-          <button className='delete-button'>
+          <button className='post-review-button'>
             <OpenModalMenuItem
               itemText="Post Your Review"
               modalComponent={<ReviewFormModal />}
@@ -182,7 +185,7 @@ const SpotPageIndex = () => {
             {review.review}
           </div>
           {review.userId === userId && (
-            <button>
+            <button className="delete-button">
               <OpenModalMenuItem
                 itemText="Delete"
                 modalComponent={<DeleteReviewModal reviewId={review.id} />}
