@@ -18,7 +18,7 @@ form {
 
 }
 
-.spot-location {
+.spot-location-form {
   display: flex;
   flex-direction: column;
   border-bottom: 2px solid black;

@@ -46,9 +46,9 @@ function ReviewFormModal() {
     }
 
     if (Object.values(errors).length === 0) {
-      
+
       const newReview = dispatch
-      (createSpotReviewThunk(review))
+        (createSpotReviewThunk(review))
       if (newReview.errors) {
         setErrors(newReview.errors)
       }
@@ -59,8 +59,8 @@ function ReviewFormModal() {
   };
 
   return (
-    <>
-      <h2>How was your stay?</h2>
+    <div className="review-form-modal">
+      <h2 className="review-form-modal-header">How was your stay?</h2>
       <form onSubmit={handleSubmit}>
         <div className="review-form-wrapper">
           <label>
@@ -73,6 +73,7 @@ function ReviewFormModal() {
               type="text"
               value={reviewMessage}
               placeholder="Leave your review here..."
+              className="review-form-input"
               onChange={(e) => setReviewMessage(e.target.value)}
               required
             />
@@ -176,17 +177,21 @@ function ReviewFormModal() {
               )}
 
             </label>
+            <div className="review-modal-star-text">
+
             Stars
+            </div>
 
           </div>
 
           <button
             type="submit"
+            className={Object.values(errors).length > 0 ? "disabled-review-modal-submit" : "enabled-review-modal-submit"}
             disabled={Object.values(errors).length > 0 ? true : false}
           >Submit Your Review</button>
         </div>
       </form>
-    </>
+    </div>
   );
 }
 
