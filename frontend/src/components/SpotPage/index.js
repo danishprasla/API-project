@@ -34,7 +34,7 @@ const SpotPageIndex = () => {
 
   useEffect(() => {
     dispatch(loadOneSpotThunk(spotId))
-    console.log('spot id in useEffect ->', spotId)
+    // console.log('spot id in useEffect ->', spotId)
     dispatch(loadSpotReviewsThunk(spotId))
 
   }, [dispatch])
