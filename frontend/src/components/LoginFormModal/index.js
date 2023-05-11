@@ -23,10 +23,25 @@ function LoginFormModal() {
         }
       });
   };
+  const handleDemoUserSubmit = (e) => {
+    e.preventDefault();
+    setErrors({});
+    return dispatch(sessionActions.login({ credential: 'Demo-lition', password: 'password' }))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
+  }
 
   return (
-    <>
-      <h1>Log In</h1>
+    <div className="login-container">
+      <h1 className="login-text">Log In</h1>
+      {errors.credential && (
+        <p className="login-error">{errors.credential}</p>
+      )}
       <form onSubmit={handleSubmit}>
         <label>
           Username or Email
@@ -46,12 +61,12 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
+        <div className="login-modal-button-container">
+          <button type="submit" className={(password.length === 0 || credential.length === 0) ? 'disabled-submit' : 'enabled-submit'} disabled={(password.length === 0 || credential.length === 0) ? true : false}>Log In</button>
+        </div>
       </form>
-    </>
+      <button className="demo-user-login" onClick={handleDemoUserSubmit}>Demo User</button>
+    </div>
   );
 }
 

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { loadOneSpotThunk } from "../../store/spots"
 import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min"
@@ -32,16 +32,21 @@ const SpotPageIndex = () => {
   // // console.log('user id--->', userId)
   // console.log(reviewsObj)
 
+  // const [randomState, setRandomState] = useState(0)
+
   useEffect(() => {
     // dispatch(loadOneSpotThunk(spotId))
-    // console.log('spot id in useEffect ->', spotId)
+    // console.log('spot id in useEffect ->', spotId
     dispatch(loadSpotReviewsThunk(spotId))
-
   }, [dispatch])
 
   useEffect(() => {
     dispatch(loadOneSpotThunk(spotId));
   }, [dispatch, spotId, reviewsObj]);
+
+  // useEffect(() => {
+
+  // }, [randomState])
 
   const spotsObj = useSelector(state => state.spots)
   // console.log('test', spotsObj[spotId])
@@ -176,7 +181,7 @@ const SpotPageIndex = () => {
         (<div key={review.id} className="user-review">
 
           <h4 className="review-firstname">
-            {review.User?.firstName}
+            {review.User?.firstName ||user.firstName}
           </h4>
           <div className="review-date">
             {convertDate(review?.createdAt)}

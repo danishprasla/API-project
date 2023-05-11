@@ -29,20 +29,20 @@ const CurrentSpotsIndex = () => {
   const editForm = 'edit'
 
   return (
-    <div className="spots">
+    <div className="spots-container">
       {spots.map((spot) => (
         <div key={spot.id} className='spot-container'>
           <div
-            className="spotTile"
+            className="spot-tile"
             onClick={() => history.push(`/spots/${spot.id}`)}
             title={spot.name}
           >
             <img
               src={spot.previewImage}
               alt={spot.name}
-              className="spotImage"
+              className="spot-image"
             />
-            <div className="spotDescription">
+            <div className="spot-description">
               <div className="location">
                 {spot.city}, {spot.state}
               </div>
@@ -52,19 +52,21 @@ const CurrentSpotsIndex = () => {
               </div>
 
             </div>
-            <div className="spotPrice">
-              ${spot.price} night
+            <div className="spot-price-container">
+              <span className="spot-price">
+                ${spot.price}
+              </span> night
             </div>
 
           </div>
           <div className='spot-controls'>
-            <button className='update-button'
+            <button className='current-spot-update-button'
               onClick={() => {
                 history.push(`/spots/${spot.id}/edit`)
               }}>
               Update
             </button>
-            <button className='delete-button'>
+            <button className='current-spot-delete-button'>
               <OpenModalMenuItem
                 itemText="Delete"
                 modalComponent={<DeleteSpotModal spotId={spot.id} />}
