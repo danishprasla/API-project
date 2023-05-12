@@ -62,7 +62,7 @@ function LoginFormModal() {
           />
         </label>
         <div className="login-modal-button-container">
-          <button type="submit" className={(password.length === 0 || credential.length === 0) ? 'disabled-submit' : 'enabled-submit'} disabled={(password.length === 0 || credential.length === 0) ? true : false}>Log In</button>
+          <button type="submit" className={(password.length === 0 || credential.length === 0) ? 'disabled-submit' : 'enabled-submit'} disabled={(password.length < 4 || credential.length < 4) ? true : false}>Log In</button>
         </div>
       </form>
       <button className="demo-user-login" onClick={handleDemoUserSubmit}>Demo User</button>

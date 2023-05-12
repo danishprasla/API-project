@@ -17,6 +17,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
+  gap: 5px;
+  
 }
 
 .other-images {
@@ -50,11 +52,15 @@
   border: solid black;
   border-radius: 10px;
   width: 360px;
+  height: 139px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 30px;
   padding-top: 10px
+}
+.host-info {
+  margin-top: 0px;
 }
 
 .booking-price {
@@ -117,4 +123,7 @@ li {
 }
 .review-date {
   color: #999999;
+}
+.description {
+  width: 900px;
 }
