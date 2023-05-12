@@ -74,7 +74,7 @@ function ReviewFormModal() {
             <textarea
               type="text"
               value={reviewMessage}
-              placeholder="Leave your review here (must be 30 characters or more)..."
+              placeholder="Leave your review here (must be 10 and 255 characters)..."
               className="review-form-input"
               onChange={(e) => setReviewMessage(e.target.value)}
               required
