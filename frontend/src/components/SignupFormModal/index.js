@@ -30,6 +30,8 @@ function SignupFormModal() {
       errorsObj.lastName = 'Last name must be provided'
     } if (password.length < 1) {
       errorsObj.password = 'Password must be provided'
+    } if (confirmPassword.length < 1) {
+      errorsObj.password = 'Password must be provided'
     }
 
     setErrors({ ...errorsObj })
