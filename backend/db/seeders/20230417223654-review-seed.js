@@ -60,7 +60,7 @@ module.exports = {
       },
       {
         spotId: 8,
-        userId: 3,
+        userId: 2,
         review: 'I was in Manhattan for a business trip and this was a nice place to stay',
         stars: 5
       }
