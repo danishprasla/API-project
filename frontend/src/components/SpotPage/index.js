@@ -61,13 +61,13 @@ const SpotPageIndex = () => {
   }
   const ownerId = spot.ownerId
 
-  console.log('reviews ->', reviewsObj)
+  // console.log('reviews obj->', reviewsObj)
   let reviewsArr = Object.values(reviewsObj)
-  // let reversedArr = []
-  // for (let i = reviewsArr.length - 1; i >= 0; i--) {
-  //   reversedArr.push(reviewsArr[i])
-  // }
-  // console.log('reversed arr --->', reversedArr)
+  let reversedArr = []
+  for (let i = reviewsArr.length - 1; i >= 0; i--) {
+    reversedArr.push(reviewsArr[i])
+  }
+  reviewsArr = reversedArr
 
 
   const reviewCheck = reviewsArr.find(review => review.userId === userId)

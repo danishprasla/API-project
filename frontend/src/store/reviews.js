@@ -32,6 +32,7 @@ export const loadSpotReviewsThunk = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}/reviews`)
   if (res.ok) {
     const reviews = await res.json()
+    console.log('reviews from thunk->', reviews)
     dispatch(loadSpotReviews(reviews))
     //return value is {'Reviews':[{},{}...]}
   }
@@ -84,9 +85,11 @@ const reviewReducer = (state = initialState, action) => {
     case GET_SPOT_REVIEWS: {
       const newState = {}
       const reviewArr = action.reviews.Reviews
+      // console.log('review arr from reducer~~~~~~~~~~~>',reviewArr)
       reviewArr.forEach((review) => {
         newState[review.id] = review
       })
+      // console.log('new state from reducer ~~~~~>', newState)
       return newState
     } case CREATE_SPOT_REVIEW: {
       const newState = { ...state }
