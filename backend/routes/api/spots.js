@@ -491,7 +491,7 @@ router.get('/:spotId/reviews', async (req, res, next) => {
   const spotId = req.params.spotId
   const spot = await Spot.findByPk(spotId)
 
-  console.log(spot)
+  // console.log(spot)
   if (!spot) {
     let err = new Error("Spot couldn't be found")
     err.title = 'Spot not found'
@@ -513,7 +513,8 @@ router.get('/:spotId/reviews', async (req, res, next) => {
         model: ReviewImage,
         attributes: ['id', 'url']
       }
-    ]
+    ],
+    order: [['id', 'DESC']]
   })
   res.status(200).json({Reviews: reviews})
 })

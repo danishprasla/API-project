@@ -11,6 +11,14 @@
   border: 2px solid black;
   box-shadow: 2px 2px 1px black;
   font-size: 12pt;
+}
 
-
+.manage-spots-create-spot {
+  background-color: #ea5b62;
+  color: white;
+  border: solid black;
+  height: 50px;
+  font-size: 12pt;
+  box-shadow: 2px 2px 1px black;
+  cursor: pointer;
 }

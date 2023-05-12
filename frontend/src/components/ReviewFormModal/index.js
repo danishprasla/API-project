@@ -28,8 +28,10 @@ function ReviewFormModal() {
     let errors = {}
     if (starRating === 0) {
       errors.stars = 'Select a star rating before submitting'
-    } if (reviewMessage.length === 0) {
-      errors.review = 'You must provide a review before submitting'
+    } if (reviewMessage.length < 10) {
+      errors.review = 'You must provide a review of at least 10 characters before submitting'
+    }if (reviewMessage.length > 255) {
+      errors.review = 'Review must be less than 255 characters'
     }
     setErrors(errors)
     // console.log(errors)
@@ -72,7 +74,7 @@ function ReviewFormModal() {
             <textarea
               type="text"
               value={reviewMessage}
-              placeholder="Leave your review here..."
+              placeholder="Leave your review here (must be 10 and 255 characters)..."
               className="review-form-input"
               onChange={(e) => setReviewMessage(e.target.value)}
               required
@@ -179,7 +181,7 @@ function ReviewFormModal() {
             </label>
             <div className="review-modal-star-text">
 
-            Stars
+              Stars
             </div>
 
           </div>

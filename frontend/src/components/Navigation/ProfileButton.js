@@ -60,7 +60,7 @@ function ProfileButton({ user }) {
           {user ? (
             <div className="profile-drop-down-items">
               <div className="drop-down-user-info">
-                <li>Hello, {user.username}</li>
+                <li>Hello, {user.firstName}</li>
                 <li>{user.email}</li>
               </div>
               <div className="manage-spots-container">
