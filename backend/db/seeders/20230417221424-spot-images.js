@@ -18,7 +18,7 @@ module.exports = {
       },
       {
         spotId: 1,
-        url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683922756/1000_qsxbxr.jpg',
+        url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683925916/ESkkTe3U0AAdx0P_w7rwky.jpg',
         preview: false
       },
       {
@@ -29,6 +29,11 @@ module.exports = {
       {
         spotId: 1,
         url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683923024/278911cc04ffa678c06fb5306a1f5ba0_dv8ynk.jpg',
+        preview: false
+      },
+      {
+        spotId: 1,
+        url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683925807/SpongeBob_SquarePants_Battle_For_Bikini_Bottom_-_Rehydrated_20200613133732_r7ecqn.png',
         preview: false
       },
       {
@@ -52,6 +57,11 @@ module.exports = {
         preview: false
       },
       {
+        spotId: 2,
+        url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683925703/E0Ki7TvVkAA-Dy8_ujdcd9.jpg',
+        preview: false
+      },
+      {
         spotId: 3,
         url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683923405/Krusty_Krab_230b_wbo7tf.png',
         preview: true
@@ -72,6 +82,12 @@ module.exports = {
         preview: false
       },
       {
+        spotId: 3,
+        url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683925582/Krusty_Krab_interior_50b_p0xfdw.png',
+        preview: false
+      },
+
+      {
         spotId: 4,
         url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683923617/latest_azfif1.jpg',
         preview: true
@@ -89,6 +105,11 @@ module.exports = {
       {
         spotId: 4,
         url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683923834/j9spbgpmx7k1iqhwan4n.jpg',
+        preview: false
+      },
+      {
+        spotId: 4,
+        url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683925509/38EB52F10F9936E3C4E23C0E5FCF5D6338094245_offg0h.jpg',
         preview: false
       },
       {
@@ -112,6 +133,12 @@ module.exports = {
         preview: false
       },
       {
+        spotId: 5,
+        url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683925406/116363-1_bzadky.jpg',
+        preview: false
+      },
+
+      {
         spotId: 6,
         url: 'https://keikibeach.com/wp-content/uploads/2206-768-49.jpg',
         preview: true
@@ -124,6 +151,11 @@ module.exports = {
       {
         spotId: 6,
         url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683924080/oceanfront-area-of-tiki_bzeceh.jpg',
+        preview: false
+      },
+      {
+        spotId: 6,
+        url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683925294/1526667790549_rwlcet.jpg',
         preview: false
       },
       {
@@ -151,6 +183,12 @@ module.exports = {
         url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683924548/rh7zvghw1gh18zurmwqk.jpg',
         preview: false
       },
+
+      {
+        spotId: 7,
+        url: 'https://i.ibb.co/9HNfKkC/Modern-open-living-by-San-Diego-interior-designers-near-me.jpg',
+        preview: false
+      },
       {
         spotId: 8,
         url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683924585/1004_1008_Second_Avenue_Picture_20221223105218325_nhfubo.jpg',
@@ -171,6 +209,11 @@ module.exports = {
         url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683924751/Living_2520room_lvo3gg.jpg',
         preview: false
       },
+      {
+        spotId: 8,
+        url: 'https://res.cloudinary.com/dfgtzibvm/image/upload/v1683925085/syv1903uzy1iakuo2ug8_ndmesx.jpg',
+        preview: false
+      }
 
 
     ])
