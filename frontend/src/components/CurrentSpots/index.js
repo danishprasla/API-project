@@ -29,53 +29,70 @@ const CurrentSpotsIndex = () => {
   const editForm = 'edit'
 
   return (
-    <div className="spots-container">
-      {spots.map((spot) => (
-        <div key={spot.id} className='spot-container'>
-          <div
-            className="spot-tile"
-            onClick={() => history.push(`/spots/${spot.id}`)}
-            title={spot.name}
-          >
-            <img
-              src={spot.previewImage}
-              alt={spot.name}
-              className="spot-image"
-            />
-            <div className="spot-description">
-              <div className="location">
-                {spot.city}, {spot.state}
-              </div>
-              <div className="rating">
-                <i className="fas fa-star"></i>
-                {spot.avgRating}
-              </div>
-
-            </div>
-            <div className="spot-price-container">
-              <span className="spot-price">
-                ${spot.price}
-              </span> night
-            </div>
-
-          </div>
-          <div className='spot-controls'>
-            <button className='current-spot-update-button'
-              onClick={() => {
-                history.push(`/spots/${spot.id}/edit`)
-              }}>
-              Update
-            </button>
-            <button className='current-spot-delete-button'>
-              <OpenModalMenuItem
-                itemText="Delete"
-                modalComponent={<DeleteSpotModal spotId={spot.id} />}
-              />
-            </button>
-          </div>
+    <div className="manage-spots-container">
+      {spots.length < 1 && (
+        <div className='no-spots'>
+          <h2>
+            You currently have no spots listed.
+          </h2>
+          <p>
+            Click the button below to be taken to the form to list your first spot!
+          </p>
+          <button className='manage-spots-create-spot' onClick={() => {
+            history.push(`/spots/new`)
+          }}>
+            Create a new spot!
+          </button>
         </div>
+      )}
+      <div className="spots-container">
+        {spots.map((spot) => (
+          <div key={spot.id} className='spot-container'>
+            <div
+              className="spot-tile"
+              onClick={() => history.push(`/spots/${spot.id}`)}
+              title={spot.name}
+            >
+              <img
+                src={spot.previewImage}
+                alt={spot.name}
+                className="spot-image"
+              />
+              <div className="spot-description">
+                <div className="location">
+                  {spot.city}, {spot.state}
+                </div>
+                <div className="rating">
+                  <i className="fas fa-star"></i>
+                  {spot.avgRating}
+                </div>
 
-      ))}
+              </div>
+              <div className="spot-price-container">
+                <span className="spot-price">
+                  ${spot.price}
+                </span> night
+              </div>
+
+            </div>
+            <div className='spot-controls'>
+              <button className='current-spot-update-button'
+                onClick={() => {
+                  history.push(`/spots/${spot.id}/edit`)
+                }}>
+                Update
+              </button>
+              <button className='current-spot-delete-button'>
+                <OpenModalMenuItem
+                  itemText="Delete"
+                  modalComponent={<DeleteSpotModal spotId={spot.id} />}
+                />
+              </button>
+            </div>
+          </div>
+
+        ))}
+      </div>
     </div>
   )
 
