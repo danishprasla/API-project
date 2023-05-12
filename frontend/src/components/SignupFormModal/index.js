@@ -21,16 +21,16 @@ function SignupFormModal() {
     if (email.length < 1) {
       errorsObj.email = 'email must be provided'
     }
-    if (username.length < 1) {
+    if (username.length < 4) {
       errorsObj.username = 'username must be provided'
     }
     if (firstName.length < 1) {
       errorsObj.firstName = 'First name must be provided'
     } if (lastName.length < 1) {
       errorsObj.lastName = 'Last name must be provided'
-    } if (password.length < 1) {
+    } if (password.length < 6) {
       errorsObj.password = 'Password must be provided'
-    } if (confirmPassword.length < 1) {
+    } if (confirmPassword.length < 6) {
       errorsObj.password = 'Password must be provided'
     }
 
