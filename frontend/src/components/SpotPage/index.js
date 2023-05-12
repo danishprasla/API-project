@@ -62,7 +62,13 @@ const SpotPageIndex = () => {
   const ownerId = spot.ownerId
 
   console.log('reviews ->', reviewsObj)
-  const reviewsArr = Object.values(reviewsObj)
+  let reviewsArr = Object.values(reviewsObj)
+  // let reversedArr = []
+  // for (let i = reviewsArr.length - 1; i >= 0; i--) {
+  //   reversedArr.push(reviewsArr[i])
+  // }
+  // console.log('reversed arr --->', reversedArr)
+
 
   const reviewCheck = reviewsArr.find(review => review.userId === userId)
 
@@ -181,7 +187,7 @@ const SpotPageIndex = () => {
         (<div key={review.id} className="user-review">
 
           <h4 className="review-firstname">
-            {review.User?.firstName ||user.firstName}
+            {review.User?.firstName || user.firstName}
           </h4>
           <div className="review-date">
             {convertDate(review?.createdAt)}
