@@ -109,7 +109,7 @@ const SpotPageIndex = () => {
       {spot.Owner &&
         <div className="details">
           <div className="spot-details">
-            <h2>
+            <h2 className="host-info">
               Hosted by {spot.Owner.firstName} {spot.Owner.lastName}
             </h2>
             <div className="description">

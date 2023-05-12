@@ -58,8 +58,11 @@ module.exports = {
         allowNull: false
       },
       description: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.TEXT,
+        allowNull: false,
+        validate: {
+          len: [30, 1000]
+        }
       },
       price: {
         type: Sequelize.DECIMAL(6, 2),
