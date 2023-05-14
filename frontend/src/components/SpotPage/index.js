@@ -4,7 +4,6 @@ import { loadOneSpotThunk } from "../../store/spots"
 import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min"
 import { loadSpotReviewsThunk } from "../../store/reviews"
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem"
-import LoginFormModal from "../LoginFormModal"
 import './SpotPage.css'
 import ReviewFormModal from "../ReviewFormModal"
 import DeleteReviewModal from "../DeleteReviewModal"
