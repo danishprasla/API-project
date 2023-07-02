@@ -2,7 +2,6 @@
 Inspired by airBnB
 
 Live Site: https://airlnl.onrender.com/ 
-  - note: it may take a few minutes to spin up
 
 Some features have not yet been implemented on the front-end despite having back-end routes. Those features are currently in development and include:
   - Update option for reviews
@@ -10,7 +9,8 @@ Some features have not yet been implemented on the front-end despite having back
 
 
 ## List of technologies used for this project:
-  - Express JS
+  - Express.js
+  - JavaScript
   - PostgreSQL
   - React
   - React-Redux. 
